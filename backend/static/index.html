@@ -1,0 +1,2038 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXz — Network Intelligence, Education & eXploration System</title>
+    <!-- Modern Typography & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css?v=2026_09_14_nexz_elevated">
+    <script>
+        window.onerror = function(message, source, lineno, colno, error) {
+            console.error("Global JS Error: ", message, " at ", source, ":", lineno, ":", colno);
+            return false;
+        };
+    </script>
+</head>
+<body class="theme-light">
+
+    <!-- LOGIN SCREEN -->
+    <div id="login-screen" class="screen-overlay active">
+        <div class="login-card animate-fade-in">
+            <div class="login-header">
+                <div class="logo-badge"><i class="fa-solid fa-shield-halved"></i></div>
+                <h2>NEXz</h2>
+                <p>Network Intelligence, Education & eXploration System</p>
+                <span class="login-subtext">Department of Computer Science &mdash; University of Ghana</span>
+            </div>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="username"><i class="fa-solid fa-user"></i> Operator Username</label>
+                    <input type="text" id="username" required autocomplete="username" placeholder="Enter username">
+                </div>
+                <div class="form-group">
+                    <label for="password"><i class="fa-solid fa-lock"></i> Password</label>
+                    <input type="password" id="password" required autocomplete="current-password" placeholder="Enter password">
+                </div>
+                <button type="button" id="btn-login" class="btn-primary" style="width:100%;">
+                    <span>Access NEXz Console</span>
+                    <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                </button>
+            </form>
+            <div id="login-error" class="error-msg hide">
+                <i class="fa-solid fa-circle-exclamation"></i> Invalid credentials. Please verify your login details.
+            </div>
+            <div class="login-footer">
+                <p>Undergraduate Computer Science Capstone &mdash; 2026</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN APP SCREEN -->
+    <div id="app-screen" class="app-layout hide">
+
+        <!-- SIDEBAR (PROFESSIONAL UNNUMBERED TWO-TIER NAVIGATION) -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fa-solid fa-network-wired logo-icon"></i>
+                <div>
+                    <h1>NEXz</h1>
+                    <span>Intelligence & Exploration</span>
+                </div>
+            </div>
+
+            <!-- TWO-TIER COLLAPSIBLE ACCORDION NAVIGATION -->
+            <nav class="sidebar-nav">
+                <!-- TOP-LEVEL: OVERVIEW & DASHBOARD -->
+                <div class="nav-section-label" style="padding: 10px 14px 4px; font-size: 11px; font-weight: 700; color: var(--text-muted); letter-spacing: 0.06em; text-transform: uppercase;">Overview</div>
+                <div class="nav-standalone-wrap">
+                    <a href="#" class="nav-item nav-item-standalone active" data-target="dashboard-view" data-tab="tab-dashboard-home">
+                        <i class="fa-solid fa-chart-pie"></i> <span>Dashboard</span>
+                    </a>
+                </div>
+
+                <!-- ACCORDION GROUP: MONITOR -->
+                <div class="nav-group" data-group="monitor" id="nav-group-monitor">
+                    <button class="nav-group-header" data-toggle="group" data-target="monitoring-view" data-tab="tab-monitor-live" type="button">
+                        <div class="group-header-left">
+                            <i class="fa-solid fa-tower-broadcast"></i>
+                            <span>Monitor</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down nav-group-arrow"></i>
+                    </button>
+                    <div class="nav-group-items">
+                        <a href="#" class="nav-subitem" data-target="monitoring-view" data-tab="tab-monitor-live">
+                            <i class="fa-solid fa-gauge"></i> <span>Live Monitoring</span>
+                        </a>
+                        <a href="#" class="nav-subitem" data-target="monitoring-view" data-tab="tab-monitor-traffic">
+                            <i class="fa-solid fa-chart-area"></i> <span>Traffic</span>
+                        </a>
+                        <a href="#" class="nav-subitem" data-target="monitoring-view" data-tab="tab-monitor-flows">
+                            <i class="fa-solid fa-stream"></i> <span>Flows</span>
+                        </a>
+                        <a href="#" class="nav-subitem" data-target="monitoring-view" data-tab="tab-monitor-devices">
+                            <i class="fa-solid fa-laptop-code"></i> <span>Devices</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- ACCORDION GROUP: SECURITY -->
+                <div class="nav-group" data-group="security" id="nav-group-security">
+                    <button class="nav-group-header" data-toggle="group" data-target="security-view" data-tab="tab-sec-threats" type="button">
+                        <div class="group-header-left">
+                            <i class="fa-solid fa-shield-halved"></i>
+                            <span>Security</span>
+                            <span id="alerts-badge" class="badge bg-danger hide">0</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down nav-group-arrow"></i>
+                    </button>
+                    <div class="nav-group-items">
+                        <a href="#" class="nav-subitem" data-target="security-view" data-tab="tab-sec-threats">
+                            <i class="fa-solid fa-shield-virus"></i> <span>Threat Detection</span>
+                        </a>
+                        <a href="#" class="nav-subitem" data-target="security-view" data-tab="tab-sec-alerts">
+                            <i class="fa-solid fa-bell"></i> <span>Alerts</span>
+                        </a>
+                        <a href="#" class="nav-subitem" data-target="security-view" data-tab="tab-sec-adwin">
+                            <i class="fa-solid fa-brain"></i> <span>ADWIN & Adaptation</span>
+                        </a>
+                        <a href="#" class="nav-subitem" data-target="security-view" data-tab="tab-sec-behaviour">
+                            <i class="fa-solid fa-fingerprint"></i> <span>Behaviour Profiles</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- ACCORDION GROUP: LEARN -->
+                <div class="nav-group" data-group="learn" id="nav-group-learn">
+                    <button class="nav-group-header" data-toggle="group" data-target="learning-view" data-tab="tab-learn-academy" type="button">
+                        <div class="group-header-left">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                            <span>Learn</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down nav-group-arrow"></i>
+                    </button>
+                    <div class="nav-group-items">
+                        <a href="#" class="nav-subitem" data-target="learning-view" data-tab="tab-learn-academy">
+                            <i class="fa-solid fa-book-bookmark"></i> <span>Protocol Academy</span>
+                        </a>
+                        <a href="#" class="nav-subitem" data-target="learning-view" data-tab="tab-learn-explained">
+                            <i class="fa-solid fa-lightbulb"></i> <span>Detection Explained</span>
+                        </a>
+                        <a href="#" class="nav-subitem" data-target="learning-view" data-tab="tab-learn-range">
+                            <i class="fa-solid fa-flask-vial"></i> <span>Cyber Range</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- ACCORDION GROUP: EXPLORE -->
+                <div class="nav-group" data-group="explore" id="nav-group-explore">
+                    <button class="nav-group-header" data-toggle="group" data-target="explore-view" data-tab="tab-explore-research" type="button">
+                        <div class="group-header-left">
+                            <i class="fa-solid fa-compass"></i>
+                            <span>Explore</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down nav-group-arrow"></i>
+                    </button>
+                    <div class="nav-group-items">
+                        <a href="#" class="nav-subitem" data-target="explore-view" data-tab="tab-explore-research">
+                            <i class="fa-solid fa-magnifying-glass-chart"></i> <span>Research & Analytics</span>
+                        </a>
+                        <a href="#" class="nav-subitem" data-target="explore-view" data-tab="tab-explore-history">
+                            <i class="fa-solid fa-clock-rotate-left"></i> <span>Historical Data</span>
+                        </a>
+                        <a href="#" class="nav-subitem" data-target="explore-view" data-tab="tab-explore-import">
+                            <i class="fa-solid fa-file-import"></i> <span>Import & Analyze</span>
+                        </a>
+                        <a href="#" class="nav-subitem" data-target="explore-view" data-tab="tab-explore-reports">
+                            <i class="fa-solid fa-file-invoice"></i> <span>Reports & Export</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- ACCORDION GROUP: SYSTEM -->
+                <div class="nav-group" data-group="system" id="nav-group-system">
+                    <button class="nav-group-header" data-toggle="group" data-target="system-view" data-tab="tab-sys-status" type="button">
+                        <div class="group-header-left">
+                            <i class="fa-solid fa-server"></i>
+                            <span>System</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down nav-group-arrow"></i>
+                    </button>
+                    <div class="nav-group-items">
+                        <a href="#" class="nav-subitem" data-target="system-view" data-tab="tab-sys-status">
+                            <i class="fa-solid fa-heart-pulse"></i> <span>Status</span>
+                        </a>
+                        <a href="#" class="nav-subitem" data-target="system-view" data-tab="tab-sys-settings">
+                            <i class="fa-solid fa-sliders"></i> <span>Settings</span>
+                        </a>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="sidebar-status">
+                <div class="status-indicator">
+                    <div id="sniffer-status-dot" class="dot"></div>
+                    <span id="sniffer-status-text">Sensor Idle (Manual)</span>
+                </div>
+                <div id="active-interface-label" class="interface-label">NIC: None</div>
+            </div>
+
+            <div class="sidebar-footer">
+                <button id="btn-open-settings" class="btn-sidebar-util" title="Configure Sensor & Import PCAP">
+                    <i class="fa-solid fa-sliders"></i> <span>Settings & PCAP</span>
+                </button>
+                <button id="btn-logout" class="btn-logout">
+                    <i class="fa-solid fa-power-off"></i> Exit Console
+                </button>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <header class="main-header">
+                <div class="header-title">
+                    <h2 id="view-title">Command Overview</h2>
+                    <p id="view-subtitle">High-level perimeter telemetry, algorithmic adaptation, and security status</p>
+                </div>
+                <div class="header-actions">
+                    <div class="monitoring-control-panel">
+                        <span style="font-weight: 600; color: var(--text-secondary);"><i class="fa-solid fa-ethernet"></i> NIC:</span>
+                        <select id="select-nic-header" class="header-select"></select>
+                        <span id="sniff-status-badge" class="threat-badge normal"><i class="fa-solid fa-circle-pause"></i> Idle</span>
+                        <button id="btn-toggle-sniff-header" class="btn-sniff-toggle">
+                            <i class="fa-solid fa-play"></i> Start Monitor
+                        </button>
+                        <span class="pps-badge"><i class="fa-solid fa-gauge-high"></i> <span id="pps-counter">0</span> PPS</span>
+                    </div>
+                    <button id="btn-theme-toggle" class="btn-theme-toggle" title="Toggle Light / Dark Mode">
+                        <i class="fa-solid fa-moon"></i> <span id="theme-toggle-label">Dark Mode</span>
+                    </button>
+                    <div class="user-badge">
+                        <i class="fa-solid fa-circle-user"></i>
+                        <span id="user-label">Operator Session</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="view-container">
+
+                <!-- ==========================================================
+                     ENVIRONMENT 0: DASHBOARD (OVERVIEW)
+                     ========================================================== -->
+                <section id="dashboard-view" class="view-panel active">
+                    <!-- High-Level Perimeter Status Ribbon -->
+                    <div class="card sensor-ops-ribbon animate-slide-up">
+                        <div class="ops-left">
+                            <div class="ops-icon"><i class="fa-solid fa-network-wired"></i></div>
+                            <div>
+                                <h3>Perimeter Telemetry & Operations Snapshot</h3>
+                                <p class="text-secondary">Unified operational posture across online stream ingestion, adaptive machine learning, and device profiling</p>
+                            </div>
+                        </div>
+                        <div class="ops-right" style="display: flex; gap: 14px; align-items: center; flex-wrap: wrap;">
+                            <span class="telemetry-pill"><i class="fa-solid fa-microchip"></i> <strong id="dash-nic-label">NIC: Local</strong></span>
+                            <span class="telemetry-pill"><i class="fa-solid fa-gauge-high"></i> <strong id="dash-pps-label">0 PPS</strong></span>
+                            <span class="telemetry-pill"><i class="fa-solid fa-stream"></i> <strong id="dash-flows-label">0 Flows</strong></span>
+                            <span class="telemetry-pill"><i class="fa-solid fa-laptop"></i> <strong id="dash-hosts-label">0 Hosts</strong></span>
+                        </div>
+                    </div>
+
+                    <!-- Security Posture & Adaptive Intelligence Row -->
+                    <div class="dashboard-grid animate-slide-up" style="margin-top: 16px;">
+                        <!-- Defense Posture Card -->
+                        <div class="card defense-health-card">
+                            <div class="health-container">
+                                <div class="health-gauge" id="dash-health-gauge" style="--gauge-value: 100; --gauge-color: var(--color-normal);">
+                                    <span id="dash-health-pct">100%</span>
+                                </div>
+                                <div class="kpi-data">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px;">
+                                        <h3>Perimeter Health</h3>
+                                        <button id="btn-dash-health-why" class="btn-xs btn-outline"><i class="fa-solid fa-circle-question"></i> Why?</button>
+                                    </div>
+                                    <span id="dash-health-status" style="font-weight: 800; color: var(--color-normal);">Optimal</span>
+                                    <span class="health-formula-hint">Dynamic Penalty Deduction Model</span>
+                                </div>
+                            </div>
+                            <div class="dashboard-severities-row" style="margin-top: 14px; display: flex; gap: 8px; justify-content: space-around;">
+                                <div class="mini-stat text-center"><span class="color-malicious" style="font-weight:800; font-size:18px;" id="dash-crit-count">0</span><br><small class="text-secondary">Critical</small></div>
+                                <div class="mini-stat text-center"><span class="color-high" style="font-weight:800; font-size:18px;" id="dash-high-count">0</span><br><small class="text-secondary">High</small></div>
+                                <div class="mini-stat text-center"><span class="color-warning" style="font-weight:800; font-size:18px;" id="dash-med-count">0</span><br><small class="text-secondary">Medium</small></div>
+                                <div class="mini-stat text-center"><span class="color-resolved" style="font-weight:800; font-size:18px;" id="dash-res-count">0</span><br><small class="text-secondary">Resolved</small></div>
+                            </div>
+                        </div>
+
+                        <!-- Adaptive Intelligence Summary Card -->
+                        <div class="card adaptive-summary-card">
+                            <div class="card-header">
+                                <h3><i class="fa-solid fa-brain"></i> Adaptive Intelligence Status</h3>
+                                <span class="badge bg-info">River Online Ensemble</span>
+                            </div>
+                            <div class="adaptive-items-stack">
+                                <!-- ADWIN Item -->
+                                <div class="adaptive-item-row">
+                                    <div class="adaptive-item-icon color-teal"><i class="fa-solid fa-wave-square"></i></div>
+                                    <div class="adaptive-item-body">
+                                        <div class="adaptive-item-title">
+                                            <strong>ADWIN Concept Drift</strong>
+                                            <span class="badge badge-sm bg-success" id="dash-adwin-badge">Stable</span>
+                                        </div>
+                                        <p class="text-secondary" id="dash-adwin-desc">Window: 0 samples | Error Variance: 0.00</p>
+                                    </div>
+                                    <a href="#" class="btn-xs btn-outline jump-link" data-target="security-view" data-tab="tab-sec-adwin">View ADWIN &rarr;</a>
+                                </div>
+
+                                <!-- Behaviour Profiles Item -->
+                                <div class="adaptive-item-row">
+                                    <div class="adaptive-item-icon color-purple"><i class="fa-solid fa-fingerprint"></i></div>
+                                    <div class="adaptive-item-body">
+                                        <div class="adaptive-item-title">
+                                            <strong>Per-Device Behaviour Profiles</strong>
+                                            <span class="badge badge-sm bg-info" id="dash-devices-badge">Active</span>
+                                        </div>
+                                        <p class="text-secondary" id="dash-devices-desc">Tracking local hosts via HalfSpaceTrees</p>
+                                    </div>
+                                    <a href="#" class="btn-xs btn-outline jump-link" data-target="security-view" data-tab="tab-sec-behaviour">View Profiles &rarr;</a>
+                                </div>
+
+                                <!-- Streaming ARF ML Item -->
+                                <div class="adaptive-item-row">
+                                    <div class="adaptive-item-icon color-navy"><i class="fa-solid fa-tree"></i></div>
+                                    <div class="adaptive-item-body">
+                                        <div class="adaptive-item-title">
+                                            <strong>Streaming Classifier (ARF)</strong>
+                                            <span class="badge badge-sm bg-success" id="dash-arf-badge">Active Online</span>
+                                        </div>
+                                        <p class="text-secondary" id="dash-arf-desc">Online Hoeffding Forest evaluating bidirectional flows</p>
+                                    </div>
+                                    <a href="#" class="btn-xs btn-outline jump-link" data-target="security-view" data-tab="tab-sec-threats">View Threats &rarr;</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Live Activity & Throughput Mini-Chart -->
+                    <div class="monitoring-grid animate-slide-up" style="margin-top: 16px;">
+                        <div class="card chart-card">
+                            <div class="card-header">
+                                <h3>Perimeter Ingestion Velocity (Bytes / 5s)</h3>
+                                <a href="#" class="jump-link text-sm" data-target="monitoring-view" data-tab="tab-monitor-live">Full Monitor &rarr;</a>
+                            </div>
+                            <div class="chart-container"><canvas id="dash-throughput-chart"></canvas></div>
+                        </div>
+
+                        <div class="card analytics-card">
+                            <div class="card-header">
+                                <h3>Top Network Talkers</h3>
+                                <a href="#" class="jump-link text-sm" data-target="monitoring-view" data-tab="tab-monitor-traffic">All Traffic &rarr;</a>
+                            </div>
+                            <div class="stat-list" id="dash-top-talkers-list">
+                                <div class="text-secondary">Awaiting active flows...</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ==========================================================
+                     ENVIRONMENT 1: MONITORING
+                     Tabs: Live Ingestion, Traffic Analysis, Flows, Devices
+                     ========================================================== -->
+                <section id="monitoring-view" class="view-panel hide">
+                    <!-- Subnavigation Tabs -->
+                    <div class="subnav-tabs">
+                        <button class="subnav-tab active" data-subtab="tab-monitor-live"><i class="fa-solid fa-tower-broadcast"></i> Live Overview</button>
+                        <button class="subnav-tab" data-subtab="tab-monitor-traffic"><i class="fa-solid fa-chart-area"></i> Traffic Analysis</button>
+                        <button class="subnav-tab" data-subtab="tab-monitor-flows"><i class="fa-solid fa-stream"></i> Flows</button>
+                        <button class="subnav-tab" data-subtab="tab-monitor-devices"><i class="fa-solid fa-laptop-code"></i> Devices</button>
+                    </div>
+
+                    <!-- TAB 1: LIVE OVERVIEW -->
+                    <div id="tab-monitor-live" class="tab-pane active">
+                        <!-- Sensor Ops Banner -->
+                        <div class="card sensor-ops-ribbon animate-slide-up">
+                            <div class="ops-left">
+                                <div class="ops-icon"><i class="fa-solid fa-tower-broadcast"></i></div>
+                                <div>
+                                    <h3>Network Sensor & Flow Ingestion Engine</h3>
+                                    <p class="text-secondary">Continuous Layer 2–Layer 4 socket capture and 5-tuple bidirectional aggregation</p>
+                                </div>
+                            </div>
+                            <div class="ops-right">
+                                <button id="btn-monitor-toggle" class="btn-primary">
+                                    <i class="fa-solid fa-play"></i> Start Capture
+                                </button>
+                                <span id="monitor-pps-display" class="pps-badge">0 Packets/sec</span>
+                            </div>
+                        </div>
+
+                        <!-- Sensor Throughput & Traffic Analytics Split -->
+                        <div class="monitoring-grid animate-slide-up">
+                            <div class="card chart-card">
+                                <div class="card-header">
+                                    <h3>Real-Time Ingestion Throughput (Bytes / 5s)</h3>
+                                    <span class="badge bg-info">Live Stream</span>
+                                </div>
+                                <div class="chart-container"><canvas id="monitor-throughput-chart"></canvas></div>
+                            </div>
+
+                            <div class="card analytics-card">
+                                <div class="card-header">
+                                    <h3>Active Traffic Counters</h3>
+                                    <span class="badge" title="Tracked flows in memory">5-Tuple Metrics</span>
+                                </div>
+                                <div class="telemetry-counter-row">
+                                    <div class="telemetry-counter">
+                                        <span class="counter-lbl">Active Endpoints</span>
+                                        <strong id="kpi-hosts" class="counter-val">0</strong>
+                                    </div>
+                                    <div class="telemetry-counter">
+                                        <span class="counter-lbl">Active Flows</span>
+                                        <strong id="kpi-active-flows" class="counter-val">0</strong>
+                                    </div>
+                                </div>
+                                <div class="xai-panel" style="margin-top: 14px;">
+                                    <div class="xai-title"><i class="fa-solid fa-circle-info"></i> Ingestion Telemetry</div>
+                                    <div class="xai-body">
+                                        Ingestion streams operate asynchronously on the Scapy worker thread. Flow features are extracted using rolling 5-tuple sliding windows.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 2: TRAFFIC ANALYSIS -->
+                    <div id="tab-monitor-traffic" class="tab-pane">
+                        <div class="monitoring-grid animate-slide-up">
+                            <div class="card analytics-card">
+                                <div class="card-header">
+                                    <h3><i class="fa-solid fa-arrow-right-arrow-left"></i> Top Network Talkers (Source IPs)</h3>
+                                    <span class="badge">Egress Volume</span>
+                                </div>
+                                <div class="stat-list" id="top-talkers-list">
+                                    <div class="text-secondary">Awaiting active flows...</div>
+                                </div>
+                            </div>
+
+                            <div class="card analytics-card">
+                                <div class="card-header">
+                                    <h3><i class="fa-solid fa-bullseye"></i> Top Targeted Destination Ports</h3>
+                                    <span class="badge">Service Probing</span>
+                                </div>
+                                <div class="stat-list" id="top-ports-list">
+                                    <div class="text-secondary">Awaiting port activity...</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 3: FLOWS (5-TUPLE STREAM VIEWER) -->
+                    <div id="tab-monitor-flows" class="tab-pane">
+                        <div class="card table-card animate-slide-up">
+                            <div class="manager-header">
+                                <div>
+                                    <h3>Live Connection Flow Stream</h3>
+                                    <p class="text-secondary">Bidirectional 5-tuple flow records aggregated by network interface</p>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+                                    <div class="search-box">
+                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                        <input type="text" id="log-search-ip" placeholder="Filter by IP address...">
+                                    </div>
+                                    <div style="display: flex; gap: 8px;">
+                                        <select id="log-filter-proto" class="header-select">
+                                            <option value="all">All Protocols</option>
+                                            <option value="TCP">TCP</option>
+                                            <option value="UDP">UDP</option>
+                                            <option value="ICMP">ICMP</option>
+                                            <option value="DNS">DNS</option>
+                                            <option value="HTTP">HTTP</option>
+                                            <option value="HTTPS">HTTPS</option>
+                                        </select>
+                                        <select id="log-filter-label" class="header-select">
+                                            <option value="all">All Predictions</option>
+                                            <option value="Normal">Normal</option>
+                                            <option value="Suspicious">Suspicious</option>
+                                            <option value="Malicious">Malicious</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-wrapper max-table-height">
+                                <table id="full-logs-table">
+                                    <thead><tr><th>Timestamp</th><th>Source Connection</th><th>Destination Connection</th><th>Proto</th><th>Bytes</th><th>Classification</th><th>Confidence</th><th>TCP State</th><th>L7 Context</th></tr></thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                            <!-- Paginated Flow Stream Controls -->
+                            <div class="pagination-footer" id="logs-pagination">
+                                <div class="pagination-info">
+                                    <span>Showing <strong id="logs-page-range">0–0</strong> of <strong id="logs-total-count">0</strong> flow records</span>
+                                    <div class="page-size-selector">
+                                        <label for="logs-page-size">Per page:</label>
+                                        <select id="logs-page-size" class="header-select select-sm">
+                                            <option value="15" selected>15</option>
+                                            <option value="30">30</option>
+                                            <option value="50">50</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="pagination-controls">
+                                    <button id="logs-prev-page" class="btn-pagination" disabled title="Previous Page">
+                                        <i class="fa-solid fa-chevron-left"></i> Prev
+                                    </button>
+                                    <span class="pagination-current">Page <strong id="logs-current-page">1</strong> of <strong id="logs-total-pages">1</strong></span>
+                                    <button id="logs-next-page" class="btn-pagination" disabled title="Next Page">
+                                        Next <i class="fa-solid fa-chevron-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 4: DEVICES DIRECTORY -->
+                    <div id="tab-monitor-devices" class="tab-pane">
+                        <div class="card table-card animate-slide-up">
+                            <div class="manager-header">
+                                <div>
+                                    <h3>Observed Local Network Devices</h3>
+                                    <p class="text-secondary">Inventory of all endpoints sending or receiving traffic across the monitored segment</p>
+                                </div>
+                                <button class="btn-secondary btn-sm" id="btn-refresh-mon-devices"><i class="fa-solid fa-rotate"></i> Refresh Inventory</button>
+                            </div>
+                            <div class="table-wrapper max-table-height">
+                                <table id="mon-devices-table">
+                                    <thead><tr><th>Host IP Address</th><th>First Seen</th><th>Last Seen</th><th>Total Flows</th><th>Total Payload Bytes</th><th>Primary Protocols</th><th>Status</th></tr></thead>
+                                    <tbody id="mon-devices-tbody">
+                                        <tr><td colspan="7" class="text-center text-secondary">Awaiting network devices...</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ==========================================================
+                     ENVIRONMENT 2: SECURITY
+                     Tabs: Threat Detection, Alerts, ADWIN & Adaptation, Behaviour Profiles
+                     ========================================================== -->
+                <section id="security-view" class="view-panel hide">
+                    <!-- Subnavigation Tabs -->
+                    <div class="subnav-tabs">
+                        <button class="subnav-tab active" data-subtab="tab-sec-threats"><i class="fa-solid fa-shield-halved"></i> Threat Detection</button>
+                        <button class="subnav-tab" data-subtab="tab-sec-alerts"><i class="fa-solid fa-bell"></i> Alerts Feed</button>
+                        <button class="subnav-tab" data-subtab="tab-sec-adwin"><i class="fa-solid fa-brain"></i> ADWIN & Adaptation</button>
+                        <button class="subnav-tab" data-subtab="tab-sec-behaviour"><i class="fa-solid fa-fingerprint"></i> Behaviour Profiles</button>
+                    </div>
+
+                    <!-- TAB 1: THREAT DETECTION OVERVIEW -->
+                    <div id="tab-sec-threats" class="tab-pane active">
+                        <!-- Defense Posture Header Block -->
+                        <div class="security-posture-deck animate-slide-up">
+                            <!-- Network Health Gauge -->
+                            <div class="card defense-health-card" id="health-card">
+                                <div class="health-container">
+                                    <div class="health-gauge" id="health-gauge" style="--gauge-value: 100; --gauge-color: var(--color-normal);">
+                                        <span id="kpi-health-pct">100%</span>
+                                    </div>
+                                    <div class="kpi-data">
+                                        <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px;">
+                                            <h3>Network Defense Posture</h3>
+                                            <button id="btn-health-why" class="btn-xs btn-outline" title="Inspect dynamic factor deduction formula"><i class="fa-solid fa-circle-question"></i> Why?</button>
+                                        </div>
+                                        <span id="kpi-health-status" style="font-weight: 800; color: var(--color-normal);">Optimal</span>
+                                        <span class="health-formula-hint">Health = 100 &minus; &Sigma;(Severity Penalties)</span>
+                                    </div>
+                                </div>
+                                <!-- Dynamic Health Factors Popover -->
+                                <div id="health-why-popover" class="health-why-popover hidden">
+                                    <div class="health-why-header">
+                                        <h4><i class="fa-solid fa-calculator"></i> Network Health Derivation</h4>
+                                        <button id="btn-close-health-why" class="btn-icon-xs">&times;</button>
+                                    </div>
+                                    <p class="text-secondary" style="font-size:0.75rem; margin-bottom:8px;">Transparent penalty deduction model based on active perimeter telemetry:</p>
+                                    <ul id="health-factors-list" class="health-factors-list">
+                                        <li class="health-factor-item neutral">Loading live derivation metrics...</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Severity Counts -->
+                            <div class="card severity-stat-card border-malicious">
+                                <span class="stat-lbl">Critical Alarms</span>
+                                <h2 id="sec-critical-count" class="stat-num color-malicious">0</h2>
+                            </div>
+                            <div class="card severity-stat-card border-high">
+                                <span class="stat-lbl">High Risk Alerts</span>
+                                <h2 id="sec-high-count" class="stat-num color-high">0</h2>
+                            </div>
+                            <div class="card severity-stat-card border-warning">
+                                <span class="stat-lbl">Medium Warnings</span>
+                                <h2 id="sec-medium-count" class="stat-num color-warning">0</h2>
+                            </div>
+                            <div class="card severity-stat-card border-resolved">
+                                <span class="stat-lbl">Resolved Incidents</span>
+                                <h2 id="sec-resolved-count" class="stat-num color-resolved">0</h2>
+                            </div>
+                        </div>
+
+                        <!-- Algorithmic Security Deck: Passive ARP Watch & Online Engine Status -->
+                        <div class="algo-health-deck animate-slide-up" style="margin-top: 16px;">
+                            <div class="card arp-watch-panel">
+                                <div style="display:flex; align-items:center; gap:12px;">
+                                    <div class="arp-icon-box"><i class="fa-solid fa-shield-virus"></i></div>
+                                    <div>
+                                        <h4>Passive ARP / MitM Watch</h4>
+                                        <p class="text-secondary">Monitoring Layer 2 duplicate IP-to-MAC reply associations to protect against gateway spoofing</p>
+                                    </div>
+                                </div>
+                                <span class="badge bg-success" id="arp-status-badge"><i class="fa-solid fa-check"></i> Subnet Clean</span>
+                            </div>
+
+                            <div class="card" style="padding: 16px;">
+                                <div style="display:flex; justify-content:space-between; align-items:center;">
+                                    <div>
+                                        <h4 style="margin-bottom:4px;"><i class="fa-solid fa-microchip"></i> Streaming ML Model Metrics</h4>
+                                        <p class="text-secondary" style="font-size:12.5px;">Adaptive Random Forest (Hoeffding Tree Ensemble)</p>
+                                    </div>
+                                    <button class="jump-link btn-xs btn-outline" data-target="security-view" data-tab="tab-sec-adwin">Drift Details &rarr;</button>
+                                </div>
+                                <div style="display:flex; gap: 16px; margin-top: 12px;">
+                                    <div><small class="text-secondary">Processed Flows:</small> <strong id="threat-samples-processed">0</strong></div>
+                                    <div><small class="text-secondary">Rolling Accuracy:</small> <strong id="threat-rolling-accuracy">100%</strong></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 2: ALERTS FEED -->
+                    <div id="tab-sec-alerts" class="tab-pane">
+                        <div class="card table-card animate-slide-up">
+                            <div class="manager-header">
+                                <div>
+                                    <h3>Centralized Security Threat Feed</h3>
+                                    <p class="text-secondary">Live alerts from machine learning flow classifications, heuristic rules, and device baseline deviations</p>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+                                    <div class="search-box">
+                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                        <input type="text" id="alert-search-ip" placeholder="Search threat IP...">
+                                    </div>
+                                    <div class="filters">
+                                        <button class="filter-btn active" data-filter="all">All Levels</button>
+                                        <button class="filter-btn" data-filter="Critical">Critical</button>
+                                        <button class="filter-btn" data-filter="High">High</button>
+                                        <button class="filter-btn" data-filter="Medium">Medium</button>
+                                        <button class="filter-btn" data-filter="Low">Low</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-wrapper max-table-height">
+                                <table id="full-alerts-table">
+                                    <thead><tr><th>Timestamp</th><th>Source Connection</th><th>Destination Connection</th><th>Protocol</th><th>Context / Notes</th><th>Severity</th><th>Occurrences</th><th>Confidence</th><th>Action</th></tr></thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                            <!-- Paginated Threat Controls -->
+                            <div class="pagination-footer" id="alerts-pagination">
+                                <div class="pagination-info">
+                                    <span>Showing <strong id="alerts-page-range">0–0</strong> of <strong id="alerts-total-count">0</strong> threat incidents</span>
+                                    <div class="page-size-selector">
+                                        <label for="alerts-page-size">Per page:</label>
+                                        <select id="alerts-page-size" class="header-select select-sm">
+                                            <option value="10" selected>10</option>
+                                            <option value="25">25</option>
+                                            <option value="50">50</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="pagination-controls">
+                                    <button id="alerts-prev-page" class="btn-pagination" disabled title="Previous Page">
+                                        <i class="fa-solid fa-chevron-left"></i> Prev
+                                    </button>
+                                    <span class="pagination-current">Page <strong id="alerts-current-page">1</strong> of <strong id="alerts-total-pages">1</strong></span>
+                                    <button id="alerts-next-page" class="btn-pagination" disabled title="Next Page">
+                                        Next <i class="fa-solid fa-chevron-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 3: ADWIN & ADAPTATION (ELEVATED FIRST-CLASS VIEW) -->
+                    <div id="tab-sec-adwin" class="tab-pane">
+                        <div class="adwin-elevated-layout animate-slide-up">
+                            <!-- Top Status & Parameter Cards Grid -->
+                            <div class="adwin-grid-deck">
+                                <!-- ADWIN Live Monitor Card -->
+                                <div class="card drift-panel">
+                                    <div style="display:flex; align-items:center; gap:14px;">
+                                        <div id="drift-ring" class="drift-ring stable"><i class="fa-solid fa-wave-square"></i></div>
+                                        <div>
+                                            <h4 id="drift-status-title">ADWIN Concept Drift Monitor: Stable</h4>
+                                            <p id="drift-status-desc" class="text-secondary">Tracking River online classifier error rate distributions (Bifet & Gavalda, 2007)</p>
+                                        </div>
+                                    </div>
+                                    <div style="display:flex; gap:16px; align-items:center; flex-wrap: wrap;">
+                                        <div style="text-align:right;">
+                                            <div><span class="text-secondary">Window Width ($W$):</span> <strong id="drift-win-size">0</strong></div>
+                                            <div><span class="text-secondary">Error Variance:</span> <strong id="drift-variance">0.00</strong></div>
+                                        </div>
+                                        <button id="btn-reset-model" class="btn-secondary btn-sm" title="Reset classifier tree weights to baseline">
+                                            <i class="fa-solid fa-rotate-left"></i> Reset Weights
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Mathematical Parameters Card -->
+                                <div class="card math-param-card">
+                                    <div class="card-header">
+                                        <h4><i class="fa-solid fa-square-root-variable"></i> Streaming Drift Parameters</h4>
+                                        <span class="badge bg-info">River v0.21</span>
+                                    </div>
+                                    <div class="param-rows-grid">
+                                        <div class="param-row"><span>Drift Confidence ($\delta$):</span> <strong>0.002 (99.8%)</strong></div>
+                                        <div class="param-row"><span>Cut Factor ($\epsilon_{cut}$):</span> <strong>Hoeffding Bound</strong></div>
+                                        <div class="param-row"><span>Ensemble Size ($k$):</span> <strong>10 Trees (ARF)</strong></div>
+                                        <div class="param-row"><span>Split Criterion:</span> <strong>Info Gain Split</strong></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Historical Drift Events Table -->
+                            <div class="card table-card" style="margin-top: 16px;">
+                                <div class="manager-header">
+                                    <div>
+                                        <h3>Concept Drift Event Timeline</h3>
+                                        <p class="text-secondary">Historical non-stationary distribution shifts detected by ADWIN and recorded in SQLite model metrics</p>
+                                    </div>
+                                    <button class="btn-secondary btn-sm" id="btn-refresh-drift-events"><i class="fa-solid fa-rotate"></i> Refresh Events</button>
+                                </div>
+                                <div class="table-wrapper max-table-height">
+                                    <table id="adwin-drift-events-table">
+                                        <thead><tr><th>Timestamp</th><th>Accuracy at Drift</th><th>F1 Score</th><th>Samples Seen</th><th>Drift Status</th><th>Ensemble Adaptation Action</th></tr></thead>
+                                        <tbody id="adwin-drift-tbody">
+                                            <tr><td colspan="6" class="text-center text-secondary">No concept drift events recorded. Ingestion stream distribution is currently stationary.</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- Educational Guide Card: Why Concept Drift Matters -->
+                            <div class="card educational-explainer-card" style="margin-top: 16px;">
+                                <div class="card-header">
+                                    <h3><i class="fa-solid fa-book-open-reader"></i> Understanding Streaming Concept Drift in Network Security</h3>
+                                </div>
+                                <div class="explainer-content">
+                                    <p>Traditional static machine learning intrusion detection models assume <em>stationarity</em> &mdash; that network traffic distributions today will mirror the training dataset forever. In live university and campus networks, this assumption quickly fails due to legitimate shifts (software updates, semester exams, new video streaming platforms) and evolving zero-day adversary techniques.</p>
+                                    <div class="explainer-points-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin-top: 12px;">
+                                        <div class="explainer-point">
+                                            <strong><i class="fa-solid fa-compress"></i> Adaptive Windowing (ADWIN)</strong>
+                                            <p>ADWIN automatically expands its sliding window when the stream is stationary to minimize variance, and rapidly contracts the window when statistically significant differences between sub-windows appear.</p>
+                                        </div>
+                                        <div class="explainer-point">
+                                            <strong><i class="fa-solid fa-arrows-split-up-and-left"></i> Hoeffding Tree Adaptation</strong>
+                                            <p>Upon ADWIN detecting drift, the Adaptive Random Forest drops underperforming background tree branches and initiates new candidate split evaluations without discarding the entire model.</p>
+                                        </div>
+                                        <div class="explainer-point">
+                                            <strong><i class="fa-solid fa-shield-check"></i> False Alarm Suppression</strong>
+                                            <p>By continually adapting to non-hostile distribution shifts, NEXz prevents alert fatigue and keeps security operators focused on genuine zero-day behavioral anomalies.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 4: BEHAVIOUR PROFILES (ELEVATED FIRST-CLASS VIEW) -->
+                    <div id="tab-sec-behaviour" class="tab-pane">
+                        <div class="card device-profiles-panel animate-slide-up">
+                            <div class="card-header">
+                                <div>
+                                    <h3 style="display:flex; align-items:center; gap:8px;">
+                                        <i class="fa-solid fa-fingerprint"></i> Per-Device Behaviour Profiles
+                                        <span id="device-lru-badge" class="badge bg-info">0 / 200 Devices (0 Evictions)</span>
+                                    </h3>
+                                    <p class="text-secondary" style="margin-top:4px;">
+                                        Streaming one-class anomaly detector (Tan, Ting & Liu, 2011; river.anomaly.HalfSpaceTrees) tracking per-host volume, timing, and protocol mix.
+                                    </p>
+                                </div>
+                                <button id="btn-refresh-devices" class="btn-secondary btn-sm">
+                                    <i class="fa-solid fa-rotate"></i> Refresh Baselines
+                                </button>
+                            </div>
+                            <div class="table-wrapper max-table-height">
+                                <table id="device-profiles-table">
+                                    <thead><tr><th>Device IP</th><th>First Observed</th><th>Last Active</th><th>Flow Samples</th><th>Avg Payload</th><th>Avg Duration</th><th>Anomaly Score (0–1)</th><th>Behavioral State</th></tr></thead>
+                                    <tbody id="device-profiles-tbody">
+                                        <tr><td colspan="8" class="text-center text-secondary">Awaiting device flows...</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- Paginated Device Profiles Controls -->
+                            <div class="pagination-footer" id="devices-pagination">
+                                <div class="pagination-info">
+                                    <span>Showing <strong id="devices-page-range">0–0</strong> of <strong id="devices-total-count">0</strong> profiled devices</span>
+                                    <div class="page-size-selector">
+                                        <label for="devices-page-size">Per page:</label>
+                                        <select id="devices-page-size" class="header-select select-sm">
+                                            <option value="10" selected>10</option>
+                                            <option value="25">25</option>
+                                            <option value="50">50</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="pagination-controls">
+                                    <button id="devices-prev-page" class="btn-pagination" disabled title="Previous Page">
+                                        <i class="fa-solid fa-chevron-left"></i> Prev
+                                    </button>
+                                    <span class="pagination-current">Page <strong id="devices-current-page">1</strong> of <strong id="devices-total-pages">1</strong></span>
+                                    <button id="devices-next-page" class="btn-pagination" disabled title="Next Page">
+                                        Next <i class="fa-solid fa-chevron-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ELEVATED: INTERACTIVE DEVICE COMPARISON PANE -->
+                        <div id="device-comparison-pane" class="card device-comparison-card animate-slide-up" style="margin-top: 16px;">
+                            <div class="card-header">
+                                <div>
+                                    <h3 id="comp-device-title"><i class="fa-solid fa-code-compare"></i> Device Behavioral Comparison: <span id="comp-ip-label">Select a device</span></h3>
+                                    <p class="text-secondary">Comparing established normal baseline against current flow telemetry</p>
+                                </div>
+                                <span id="comp-score-badge" class="badge bg-secondary">Score: N/A</span>
+                            </div>
+                            <div class="comparison-grid">
+                                <!-- Baseline Box -->
+                                <div class="comparison-column baseline-col">
+                                    <div class="col-title"><i class="fa-solid fa-clipboard-check"></i> 1. Established Normal Baseline</div>
+                                    <div class="metric-row"><span>Sample Count:</span> <strong id="comp-base-samples">-</strong></div>
+                                    <div class="metric-row"><span>Avg Payload:</span> <strong id="comp-base-bytes">-</strong></div>
+                                    <div class="metric-row"><span>Avg Duration:</span> <strong id="comp-base-dur">-</strong></div>
+                                    <div class="metric-row"><span>Observed Protocols:</span> <strong id="comp-base-protos">-</strong></div>
+                                </div>
+
+                                <!-- Current Flow Box -->
+                                <div class="comparison-column current-col">
+                                    <div class="col-title"><i class="fa-solid fa-wave-square"></i> 2. Current Flow Telemetry</div>
+                                    <div class="metric-row"><span>Active Status:</span> <strong id="comp-cur-status">-</strong></div>
+                                    <div class="metric-row"><span>Anomaly Score:</span> <strong id="comp-cur-score">-</strong></div>
+                                    <div class="metric-row"><span>Total Volume:</span> <strong id="comp-cur-total-bytes">-</strong></div>
+                                    <div class="metric-row"><span>Last Observed:</span> <strong id="comp-cur-last-seen">-</strong></div>
+                                </div>
+
+                                <!-- Algorithmic Deviation Diagnosis -->
+                                <div class="comparison-column diagnosis-col">
+                                    <div class="col-title"><i class="fa-solid fa-magnifying-glass-chart"></i> 3. Algorithmic Deviation Diagnosis</div>
+                                    <div id="comp-diagnosis-text" class="diagnosis-body">
+                                        Click any device in the table above to inspect its multi-dimensional Half-Space Trees mass distribution and see why it is classified as normal or anomalous.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ==========================================================
+                     ENVIRONMENT 3: LEARN
+                     Tabs: Protocol Academy, Detection Explained, Cyber Range
+                     ========================================================== -->
+                <section id="learning-view" class="view-panel hide">
+                    <!-- Subnavigation Tabs -->
+                    <div class="subnav-tabs">
+                        <button class="subnav-tab active" data-subtab="tab-learn-academy"><i class="fa-solid fa-graduation-cap"></i> Protocol Academy</button>
+                        <button class="subnav-tab" data-subtab="tab-learn-explained"><i class="fa-solid fa-lightbulb"></i> Detection Explained</button>
+                        <button class="subnav-tab" data-subtab="tab-learn-range"><i class="fa-solid fa-flask-vial"></i> Cyber Range</button>
+                    </div>
+
+                    <!-- TAB 1: PROTOCOL ACADEMY -->
+                    <div id="tab-learn-academy" class="tab-pane active">
+                        <div class="academy-header-row" style="margin-bottom: 14px;">
+                            <div>
+                                <h3><i class="fa-solid fa-book-bookmark"></i> Contextual Protocol Academy</h3>
+                                <p class="text-secondary">RFC protocol standards linked to real packet structures (Learn &rarr; Observe &rarr; Security &rarr; Explore)</p>
+                            </div>
+                        </div>
+                        <div class="academy-grid animate-slide-up" id="academy-grid">
+                            <!-- Protocol Cards dynamically rendered by JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- TAB 2: DETECTION EXPLAINED (ELEVATED FIRST-CLASS VIEW) -->
+                    <div id="tab-learn-explained" class="tab-pane">
+                        <div class="detection-explained-container animate-slide-up">
+                            <div class="case-study-selector-bar">
+                                <span style="font-weight: 700; color: var(--text-secondary); margin-right: 8px;">Select Attack Archetype:</span>
+                                <div class="case-study-chips" id="case-study-chips">
+                                    <button class="case-chip active" data-study="scan"><i class="fa-solid fa-radar"></i> Port Scan Reconnaissance</button>
+                                    <button class="case-chip" data-study="syn"><i class="fa-solid fa-fire"></i> TCP SYN Flood DoS</button>
+                                    <button class="case-chip" data-study="exfil"><i class="fa-solid fa-cloud-arrow-up"></i> Outbound Data Exfiltration</button>
+                                    <button class="case-chip" data-study="arp"><i class="fa-solid fa-shield-virus"></i> ARP Cache Poisoning (MitM)</button>
+                                    <button class="case-chip" data-study="hst"><i class="fa-solid fa-fingerprint"></i> Device Baseline Anomaly (HST)</button>
+                                </div>
+                            </div>
+
+                            <!-- Dynamic Case Study Content Pane -->
+                            <div class="card case-study-card" id="case-study-card" style="margin-top: 16px;">
+                                <div class="card-header">
+                                    <div>
+                                        <h3 id="case-study-title">1. Port Scan Reconnaissance</h3>
+                                        <p class="text-secondary" id="case-study-tagline">Probing sequential or random destination ports to discover running network services</p>
+                                    </div>
+                                    <span class="badge bg-warning" id="case-study-badge">Reconnaissance</span>
+                                </div>
+                                <div class="case-study-body">
+                                    <div class="case-section">
+                                        <div class="case-section-title"><i class="fa-solid fa-circle-question"></i> What Happened?</div>
+                                        <p id="case-what-happened">A remote or internal host sent rapid TCP SYN packets to multiple different destination ports within a short observation window without completing the full TCP three-way handshake.</p>
+                                    </div>
+                                    <div class="case-section">
+                                        <div class="case-section-title"><i class="fa-solid fa-triangle-exclamation"></i> Why Does It Matter?</div>
+                                        <p id="case-why-matter">Reconnaissance is the initial phase of cyberattacks (MITRE ATT&CK T1046). Adversaries identify exposed listening services (e.g. SSH on port 22, RDP on port 3389) before launching targeted exploits.</p>
+                                    </div>
+                                    <div class="case-section">
+                                        <div class="case-section-title"><i class="fa-solid fa-magnifying-glass"></i> What Did NEXz Observe?</div>
+                                        <div class="case-telemetry-box" id="case-telemetry-box">
+                                            <strong>Telemetry Signatures:</strong> Flow duration &lt; 0.1s, packet size &lt; 64 bytes, TCP SYN flag set without ACK, target port dispersion across destination IPs.
+                                        </div>
+                                    </div>
+                                    <div class="case-section">
+                                        <div class="case-section-title"><i class="fa-solid fa-list-check"></i> Analyst & Student Investigation Playbook</div>
+                                        <ol class="playbook-steps" id="case-playbook-steps">
+                                            <li>Navigate to <strong>Monitor &rarr; Traffic Analysis</strong> and check the <em>Top Targeted Destination Ports</em> widget.</li>
+                                            <li>Filter <strong>Monitor &rarr; Flows</strong> by the suspicious source IP and verify TCP handshake flags (SYN-SENT vs ESTABLISHED).</li>
+                                            <li>Determine whether the scanner is an authorized campus administrative tool (e.g. vulnerability scanner) or an unauthorized intruder.</li>
+                                            <li>If unauthorized, acknowledge the alert in <strong>Security &rarr; Alerts</strong> and configure a perimeter firewall block on the border router.</li>
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 3: CYBER RANGE -->
+                    <div id="tab-learn-range" class="tab-pane">
+                        <div class="card cyber-range-deck animate-slide-up">
+                            <div class="range-header">
+                                <div>
+                                    <h3><i class="fa-solid fa-gamepad"></i> Pedagogical Cyber Range & Attack Simulator</h3>
+                                    <p class="text-secondary">Inject controlled synthetic threat patterns directly into the NEXz pipeline to demonstrate detection and mitigation safely.</p>
+                                </div>
+                                <button id="btn-stop-simulation" class="btn-abort-sim hide">
+                                    <i class="fa-solid fa-circle-stop"></i> Abort Active Simulation
+                                </button>
+                            </div>
+
+                            <div class="sim-card-grid">
+                                <div class="sim-card sim-card-dos">
+                                    <div>
+                                        <h4 class="color-malicious"><i class="fa-solid fa-fire"></i> SYN Flood (DoS)</h4>
+                                        <p class="text-secondary">High-frequency TCP SYN handshakes targeting open services to simulate connection exhaustion.</p>
+                                    </div>
+                                    <button class="btn-sim-trigger btn-sim-dos" data-sim="dos">Launch SYN Flood</button>
+                                </div>
+                                <div class="sim-card sim-card-scan">
+                                    <div>
+                                        <h4 class="color-warning"><i class="fa-solid fa-radar"></i> Port Scan Sweep</h4>
+                                        <p class="text-secondary">Rapid sequential TCP/SYN probing across common service ports to simulate network reconnaissance.</p>
+                                    </div>
+                                    <button class="btn-sim-trigger btn-sim-scan" data-sim="scan">Launch Port Sweep</button>
+                                </div>
+                                <div class="sim-card sim-card-exfil">
+                                    <div>
+                                        <h4 class="color-purple"><i class="fa-solid fa-cloud-arrow-up"></i> Data Exfiltration</h4>
+                                        <p class="text-secondary">Simulates single-host volumetric payload transfer uploading a multi-megabyte archive to an external IP.</p>
+                                    </div>
+                                    <button class="btn-sim-trigger btn-sim-exfil" data-sim="exfil">Simulate Exfiltration</button>
+                                </div>
+                                <div class="sim-card sim-card-benign">
+                                    <div>
+                                        <h4 class="color-normal"><i class="fa-solid fa-globe"></i> Benign Browsing</h4>
+                                        <p class="text-secondary">Generates realistic student HTTP/HTTPS browsing, DNS queries, and background operating system telemetry.</p>
+                                    </div>
+                                    <button class="btn-sim-trigger btn-sim-normal" data-sim="normal">Generate Benign</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ==========================================================
+                     ENVIRONMENT 4: EXPLORE (RESEARCH & ANALYTICS)
+                     Tabs: Research & Analytics, Historical Data, Reports & Export
+                     ========================================================== -->
+                <section id="explore-view" class="view-panel hide">
+                    <!-- Subnavigation Tabs -->
+                    <div class="subnav-tabs">
+                        <button class="subnav-tab active" data-subtab="tab-explore-research"><i class="fa-solid fa-magnifying-glass-chart"></i> Research & Analytics</button>
+                        <button class="subnav-tab" data-subtab="tab-explore-history"><i class="fa-solid fa-clock-rotate-left"></i> Historical Data</button>
+                        <button class="subnav-tab" data-subtab="tab-explore-import"><i class="fa-solid fa-file-import"></i> Import & Analyze</button>
+                        <button class="subnav-tab" data-subtab="tab-explore-reports"><i class="fa-solid fa-file-invoice"></i> Reports & Export</button>
+                    </div>
+
+                    <!-- TAB 1: RESEARCH & TELEMETRY WORKBENCH -->
+                    <div id="tab-explore-research" class="tab-pane active">
+                        <div class="card research-workbench-deck animate-slide-up">
+                            <div class="workbench-header">
+                                <div>
+                                    <h3><i class="fa-solid fa-flask-vial"></i> Student & Researcher Telemetry Query Workbench</h3>
+                                    <p class="text-secondary">Execute multi-criteria empirical queries over collected flow datasets with live aggregate statistics and CSV export.</p>
+                                </div>
+                                <button id="btn-toggle-filters-drawer" class="btn-secondary btn-sm">
+                                    <i class="fa-solid fa-filter"></i> <span>Expand Query Filters</span>
+                                </button>
+                            </div>
+
+                            <!-- Expandable Research Query Drawer -->
+                            <div id="research-filters-drawer" class="filters-drawer-panel hide">
+                                <div class="query-grid">
+                                    <div class="form-group">
+                                        <label for="res-filter-src-ip">Source IP Filter</label>
+                                        <input type="text" id="res-filter-src-ip" class="header-select" placeholder="e.g. 192.168.1.50">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="res-filter-dest-ip">Destination IP Filter</label>
+                                        <input type="text" id="res-filter-dest-ip" class="header-select" placeholder="e.g. 8.8.8.8">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="res-filter-proto">Protocol</label>
+                                        <select id="res-filter-proto" class="header-select">
+                                            <option value="">All Protocols</option>
+                                            <option value="TCP">TCP</option>
+                                            <option value="UDP">UDP</option>
+                                            <option value="ICMP">ICMP</option>
+                                            <option value="DNS">DNS</option>
+                                            <option value="HTTP">HTTP</option>
+                                            <option value="HTTPS">HTTPS</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="res-filter-label">Classifier Label</label>
+                                        <select id="res-filter-label" class="header-select">
+                                            <option value="">All Classifications</option>
+                                            <option value="Normal">Normal</option>
+                                            <option value="Suspicious">Suspicious</option>
+                                            <option value="Malicious">Malicious</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="res-filter-start">Start Time</label>
+                                        <input type="datetime-local" id="res-filter-start" class="header-select">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="res-filter-end">End Time</label>
+                                        <input type="datetime-local" id="res-filter-end" class="header-select">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="res-filter-source">Data Source</label>
+                                        <select id="res-filter-source" class="header-select">
+                                            <option value="">All Sources</option>
+                                            <option value="live">Live Capture</option>
+                                            <option value="pcap">PCAP Uploads</option>
+                                            <option value="import">Imported Telemetry</option>
+                                            <option value="replay">Replay Streams</option>
+                                            <option value="sim">Simulations</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="res-filter-batch">Import Batch</label>
+                                        <select id="res-filter-batch" class="header-select">
+                                            <option value="">All Batches</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="drawer-actions">
+                                    <button id="btn-run-query" class="btn-primary"><i class="fa-solid fa-play"></i> Execute Query</button>
+                                    <button id="btn-reset-query" class="btn-secondary"><i class="fa-solid fa-rotate-left"></i> Reset Parameters</button>
+                                    <button id="btn-export-query-csv" class="btn-secondary" style="margin-left: auto;">
+                                        <i class="fa-solid fa-file-csv"></i> Export Results CSV
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Query Aggregate KPIs -->
+                            <div class="workbench-kpi-row" style="margin-top: 14px;">
+                                <div class="kpi-mini-card">
+                                    <span class="lbl">Matching Flows</span>
+                                    <strong id="res-total-flows" class="val">0</strong>
+                                </div>
+                                <div class="kpi-mini-card">
+                                    <span class="lbl">Total Transferred Volume</span>
+                                    <strong id="res-total-volume" class="val">0 KB</strong>
+                                </div>
+                                <div class="kpi-mini-card">
+                                    <span class="lbl">Avg Duration</span>
+                                    <strong id="res-avg-duration" class="val">0.00s</strong>
+                                </div>
+                                <div class="kpi-mini-card">
+                                    <span class="lbl">Malicious Flow Share</span>
+                                    <strong id="res-malicious-share" class="val">0.0%</strong>
+                                </div>
+                            </div>
+
+                            <!-- Query Results Table -->
+                            <div class="table-wrapper max-table-height" style="margin-top: 14px;">
+                                <table id="res-query-table">
+                                    <thead><tr><th>Timestamp</th><th>Source IP:Port</th><th>Dest IP:Port</th><th>Proto</th><th>Bytes</th><th>Duration</th><th>Classification</th><th>TCP State</th></tr></thead>
+                                    <tbody id="res-query-tbody">
+                                        <tr><td colspan="8" class="text-center text-secondary">Execute query or expand parameters to analyze telemetry records.</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- Paginated Research Controls -->
+                            <div class="pagination-footer" id="research-pagination">
+                                <div class="pagination-info">
+                                    <span>Showing <strong id="research-page-range">0–0</strong> of <strong id="research-total-count">0</strong> matching flows</span>
+                                    <div class="page-size-selector">
+                                        <label for="research-page-size">Per page:</label>
+                                        <select id="research-page-size" class="header-select select-sm">
+                                            <option value="15" selected>15</option>
+                                            <option value="30">30</option>
+                                            <option value="50">50</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="pagination-controls">
+                                    <button id="research-prev-page" class="btn-pagination" disabled title="Previous Page">
+                                        <i class="fa-solid fa-chevron-left"></i> Prev
+                                    </button>
+                                    <span class="pagination-current">Page <strong id="research-current-page">1</strong> of <strong id="research-total-pages">1</strong></span>
+                                    <button id="research-next-page" class="btn-pagination" disabled title="Next Page">
+                                        Next <i class="fa-solid fa-chevron-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 2: HISTORICAL DATA & TRENDS -->
+                    <div id="tab-explore-history" class="tab-pane">
+                        <div class="charts-grid animate-slide-up">
+                            <div class="card chart-card">
+                                <h3>Longitudinal Traffic Volume (Bytes / 5 min)</h3>
+                                <div class="chart-container"><canvas id="longitudinal-chart"></canvas></div>
+                            </div>
+                            <div class="card chart-card">
+                                <h3>Historical Security Incidents by Threat Level</h3>
+                                <div class="chart-container"><canvas id="incidents-history-chart"></canvas></div>
+                            </div>
+                        </div>
+                        <div class="card chart-card animate-slide-up" style="margin-top: 16px;">
+                            <div class="card-header">
+                                <h3>Aggregate Protocol Distribution</h3>
+                                <span class="badge bg-secondary">Total Observed Sessions</span>
+                            </div>
+                            <div class="chart-container" style="max-height: 260px;"><canvas id="protocol-donut-chart"></canvas></div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 3: REPORTS & EXPORT -->
+                    <div id="tab-explore-reports" class="tab-pane">
+                        <div class="card export-deck animate-slide-up">
+                            <div class="export-header">
+                                <h3><i class="fa-solid fa-file-export"></i> Institutional Research Data & Forensic Export</h3>
+                                <p class="text-secondary">Export structured network telemetry logs and formal executive security reports.</p>
+                            </div>
+                            <div class="export-actions-grid">
+                                <div class="export-card">
+                                    <div class="export-icon"><i class="fa-solid fa-file-pdf"></i></div>
+                                    <div>
+                                        <h4>Executive Security Posture Audit (PDF)</h4>
+                                        <p class="text-secondary">Formal academic report summarizing perimeter defense health, threat classifications, and algorithmic metrics.</p>
+                                    </div>
+                                    <button id="btn-download-pdf" class="btn-primary">
+                                        <i class="fa-solid fa-file-arrow-down"></i> Generate Audit PDF
+                                    </button>
+                                </div>
+                                <div class="export-card">
+                                    <div class="export-icon"><i class="fa-solid fa-file-csv"></i></div>
+                                    <div>
+                                        <h4>Forensic Network Telemetry Dataset (CSV)</h4>
+                                        <p class="text-secondary">Export comprehensive 5-tuple flow logs, payload bytes, timestamps, and classifications for external statistical modeling.</p>
+                                    </div>
+                                    <button id="btn-download-csv" class="btn-secondary">
+                                        <i class="fa-solid fa-table"></i> Export Forensic CSV
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Wireshark Handoff Guide -->
+                            <div class="card wireshark-guide-card" style="margin-top: 20px;">
+                                <div class="card-header">
+                                    <h4><i class="fa-solid fa-network-wired"></i> Wireshark Deep-Packet Forensic Handoff</h4>
+                                </div>
+                                <p class="text-secondary" style="font-size:13px; line-height: 1.5; margin-bottom: 12px;">
+                                    When investigating an incident flagged by NEXz, transition to Wireshark for full packet byte analysis using the following standardized protocol:
+                                </p>
+                                <div class="wireshark-steps-grid">
+                                    <div class="wireshark-step">
+                                        <div class="step-badge">Step 1</div>
+                                        <strong>Copy Flow 5-Tuple</strong>
+                                        <p>Note the exact Source IP, Destination IP, and Destination Port from the NEXz Alert feed.</p>
+                                    </div>
+                                    <div class="wireshark-step">
+                                        <div class="step-badge">Step 2</div>
+                                        <strong>Open Raw Capture</strong>
+                                        <p>Open the corresponding timestamped PCAP in Wireshark on the monitoring workstation.</p>
+                                    </div>
+                                    <div class="wireshark-step">
+                                        <div class="step-badge">Step 3</div>
+                                        <strong>Apply Display Filter</strong>
+                                        <p><code>ip.addr == &lt;src_ip&gt; &amp;&amp; tcp.port == &lt;dest_port&gt;</code></p>
+                                    </div>
+                                    <div class="wireshark-step">
+                                        <div class="step-badge">Step 4</div>
+                                        <strong>Follow Stream</strong>
+                                        <p>Right-click any matching packet and select <em>Follow &rarr; TCP Stream</em> to inspect raw payload.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 3: IMPORT & ANALYZE (ENTERPRISE MULTI-FORMAT TELEMETRY WIZARD) -->
+                    <div id="tab-explore-import" class="tab-pane">
+                        <div class="card import-wizard-deck animate-slide-up">
+                            <div class="workbench-header">
+                                <div>
+                                    <h3><i class="fa-solid fa-file-import"></i> External Telemetry Ingestion & Multi-Mode Analysis</h3>
+                                    <p class="text-secondary">Stream PCAP, PCAPNG, CSV, JSON, JSONL, Zeek, Suricata EVE, and IOC watchlists through the canonical NEXz detection and research pipeline.</p>
+                                </div>
+                                <div style="display: flex; gap: 8px;">
+                                    <button id="btn-open-watchlist-modal" class="btn-secondary btn-sm">
+                                        <i class="fa-solid fa-shield-halved"></i> <span>Watchlist / IOC Manager</span>
+                                    </button>
+                                    <button id="btn-refresh-import-history" class="btn-secondary btn-sm">
+                                        <i class="fa-solid fa-rotate"></i> <span>Refresh Batches</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- WIZARD STAGE STEPPER -->
+                            <div class="import-stepper">
+                                <div class="step-item active" id="step-nav-1" data-step="1">
+                                    <div class="step-circle">1</div>
+                                    <div class="step-label">Select Data</div>
+                                </div>
+                                <div class="step-connector"></div>
+                                <div class="step-item" id="step-nav-2" data-step="2">
+                                    <div class="step-circle">2</div>
+                                    <div class="step-label">Inspect</div>
+                                </div>
+                                <div class="step-connector"></div>
+                                <div class="step-item" id="step-nav-3" data-step="3">
+                                    <div class="step-circle">3</div>
+                                    <div class="step-label">Map & Validate</div>
+                                </div>
+                                <div class="step-connector"></div>
+                                <div class="step-item" id="step-nav-4" data-step="4">
+                                    <div class="step-circle">4</div>
+                                    <div class="step-label">Configuration</div>
+                                </div>
+                                <div class="step-connector"></div>
+                                <div class="step-item" id="step-nav-5" data-step="5">
+                                    <div class="step-circle">5</div>
+                                    <div class="step-label">Results</div>
+                                </div>
+                            </div>
+
+                            <!-- STAGE 1: SELECT DATA -->
+                            <div id="import-stage-1" class="wizard-stage active">
+                                <div class="import-dropzone-container" id="import-dropzone">
+                                    <i class="fa-solid fa-cloud-arrow-up dropzone-icon"></i>
+                                    <h4>Drag & Drop Network Telemetry File Here</h4>
+                                    <p class="text-muted">Or browse from your local file system to inspect and import</p>
+                                    <input type="file" id="import-file-input" style="display: none;" accept=".pcap,.pcapng,.csv,.json,.jsonl,.ndjson,.tsv,.log,.txt">
+                                    <button type="button" id="btn-browse-import" class="btn-primary" style="margin-top: 10px;">
+                                        <i class="fa-solid fa-folder-open"></i> Browse Network File
+                                    </button>
+                                    <div class="supported-formats-pills" style="margin-top: 18px;">
+                                        <span class="fmt-pill"><i class="fa-solid fa-file-waveform"></i> .pcap / .pcapng</span>
+                                        <span class="fmt-pill"><i class="fa-solid fa-file-csv"></i> .csv</span>
+                                        <span class="fmt-pill"><i class="fa-solid fa-file-code"></i> .json / .jsonl</span>
+                                        <span class="fmt-pill"><i class="fa-solid fa-network-wired"></i> Zeek conn.log</span>
+                                        <span class="fmt-pill"><i class="fa-solid fa-shield"></i> Suricata EVE</span>
+                                        <span class="fmt-pill"><i class="fa-solid fa-list-check"></i> TXT IOC Lists</span>
+                                    </div>
+                                </div>
+
+                                <div class="import-meta-inputs" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 18px;">
+                                    <div class="form-group">
+                                        <label for="import-dataset-name">Dataset Name (Optional)</label>
+                                        <input type="text" id="import-dataset-name" class="header-select" placeholder="e.g. Lab Intrusion Benchmark 2026">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="import-description">Description / Study Notes</label>
+                                        <input type="text" id="import-description" class="header-select" placeholder="e.g. Volumetric flood evaluation from campus subnet">
+                                    </div>
+                                </div>
+
+                                <div id="selected-file-card" class="selected-file-preview hide" style="margin-top: 14px;">
+                                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                                        <div style="display: flex; align-items: center; gap: 12px;">
+                                            <i class="fa-solid fa-file-lines" style="font-size: 24px; color: var(--accent-teal);"></i>
+                                            <div>
+                                                <strong id="selected-file-name">filename.csv</strong>
+                                                <div id="selected-file-size" class="text-muted" style="font-size: 12px;">0 KB</div>
+                                            </div>
+                                        </div>
+                                        <button type="button" id="btn-upload-and-inspect" class="btn-primary">
+                                            <i class="fa-solid fa-arrow-right"></i> Upload & Inspect Schema
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- STAGE 2: INSPECT SCHEMA & PREVIEW -->
+                            <div id="import-stage-2" class="wizard-stage hide">
+                                <div class="stage-header-meta">
+                                    <div class="kpi-mini-card">
+                                        <span class="lbl">Detected Format</span>
+                                        <span class="val" id="stage2-detected-fmt">-</span>
+                                    </div>
+                                    <div class="kpi-mini-card">
+                                        <span class="lbl">Estimated Records</span>
+                                        <span class="val" id="stage2-estimated-records">-</span>
+                                    </div>
+                                    <div class="kpi-mini-card">
+                                        <span class="lbl">Columns Detected</span>
+                                        <span class="val" id="stage2-column-count">-</span>
+                                    </div>
+                                    <div class="kpi-mini-card">
+                                        <span class="lbl">Auto-Mapped</span>
+                                        <span class="val" id="stage2-automapped-count" style="color: var(--color-normal);">-</span>
+                                    </div>
+                                </div>
+
+                                <div style="margin-top: 16px;">
+                                    <h4 style="font-size: 13px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px;">Detected Attributes in File</h4>
+                                    <div id="stage2-columns-pills" class="stage-columns-cloud"></div>
+                                </div>
+
+                                <div style="margin-top: 18px;">
+                                    <h4 style="font-size: 13px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px;">Sample Records (First 5 Rows)</h4>
+                                    <div class="table-responsive" style="max-height: 240px; overflow-y: auto;">
+                                        <table class="table table-hover" id="stage2-sample-table">
+                                            <thead id="stage2-sample-thead"></thead>
+                                            <tbody id="stage2-sample-tbody"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div class="stage-action-bar" style="margin-top: 20px; display: flex; justify-content: space-between;">
+                                    <button type="button" id="btn-stage2-back" class="btn-secondary"><i class="fa-solid fa-arrow-left"></i> Re-select File</button>
+                                    <button type="button" id="btn-stage2-next" class="btn-primary"><i class="fa-solid fa-arrows-split-up-and-left"></i> Proceed to Field Mapping</button>
+                                </div>
+                            </div>
+
+                            <!-- STAGE 3: MAP & VALIDATE -->
+                            <div id="import-stage-3" class="wizard-stage hide">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                    <div>
+                                        <h4 style="font-size: 14px; font-weight: 700; margin: 0;">Canonical Schema Field Alignment</h4>
+                                        <p class="text-secondary" style="font-size: 12px; margin: 2px 0 0 0;">Map external dataset columns to internal NEXz canonical network fields.</p>
+                                    </div>
+                                    <div style="display: flex; gap: 8px;">
+                                        <button type="button" id="btn-stage3-automap" class="btn-secondary btn-sm"><i class="fa-solid fa-wand-magic-sparkles"></i> Auto-Detect</button>
+                                        <button type="button" id="btn-stage3-reset" class="btn-secondary btn-sm"><i class="fa-solid fa-rotate-left"></i> Clear All</button>
+                                    </div>
+                                </div>
+
+                                <div class="table-responsive" style="max-height: 280px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 8px;">
+                                    <table class="table" id="mapping-table" style="margin-bottom: 0;">
+                                        <thead style="position: sticky; top: 0; background: var(--bg-surface-subtle); z-index: 2;">
+                                            <tr>
+                                                <th>NEXz Canonical Field</th>
+                                                <th>Required For</th>
+                                                <th>Mapped Dataset Column</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="mapping-table-tbody"></tbody>
+                                    </table>
+                                </div>
+
+                                <!-- CAPABILITY MATRIX -->
+                                <div style="margin-top: 18px;">
+                                    <h4 style="font-size: 13px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px;">Pipeline Capability Assessment (No Synthetic Fabrication)</h4>
+                                    <div class="capabilities-grid" id="capabilities-badges-grid"></div>
+                                </div>
+
+                                <!-- VALIDATION BANNER -->
+                                <div id="validation-summary-card" class="validation-banner hide" style="margin-top: 14px;">
+                                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                                        <div style="display: flex; gap: 16px;">
+                                            <span><strong>Valid Rows:</strong> <span id="val-valid-count" style="color: var(--color-normal);">0</span></span>
+                                            <span><strong>Invalid Rows:</strong> <span id="val-invalid-count" style="color: var(--color-malicious);">0</span></span>
+                                            <span><strong>Warnings:</strong> <span id="val-warn-count" style="color: var(--color-warning);">0</span></span>
+                                        </div>
+                                        <span id="val-status-badge" class="badge bg-success">Passed</span>
+                                    </div>
+                                </div>
+
+                                <div class="stage-action-bar" style="margin-top: 20px; display: flex; justify-content: space-between;">
+                                    <button type="button" id="btn-stage3-back" class="btn-secondary"><i class="fa-solid fa-arrow-left"></i> Back to Inspect</button>
+                                    <div style="display: flex; gap: 8px;">
+                                        <button type="button" id="btn-stage3-validate" class="btn-secondary"><i class="fa-solid fa-spell-check"></i> Run Validation Pass</button>
+                                        <button type="button" id="btn-stage3-next" class="btn-primary"><i class="fa-solid fa-gears"></i> Proceed to Analysis Mode</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- STAGE 4: CONFIGURATION & MODES -->
+                            <div id="import-stage-4" class="wizard-stage hide">
+                                <h4 style="font-size: 14px; font-weight: 700; margin-bottom: 4px;">Select Telemetry Analysis Mode</h4>
+                                <p class="text-secondary" style="font-size: 12px; margin-bottom: 16px;">Choose how the imported dataset should participate in the NEXz analytics and machine learning pipeline.</p>
+
+                                <div class="analysis-modes-grid">
+                                    <label class="mode-card active" data-mode="analyze_only">
+                                        <input type="radio" name="import-mode" value="analyze_only" checked>
+                                        <div class="mode-card-content">
+                                            <div class="mode-title"><i class="fa-solid fa-magnifying-glass"></i> Mode 1: Analyze Only (Default)</div>
+                                            <p>Classifies traffic via ARF & Baseline models, profiles device hosts, correlates watchlists, and persists for research. <strong>Never alters live streaming model weights.</strong></p>
+                                        </div>
+                                    </label>
+
+                                    <label class="mode-card" data-mode="historical">
+                                        <input type="radio" name="import-mode" value="historical">
+                                        <div class="mode-card-content">
+                                            <div class="mode-title"><i class="fa-solid fa-clock-rotate-left"></i> Mode 2: Historical Research Import</div>
+                                            <p>Fast batch ingestion for Research Workbench queries, longitudinal analytics, and dataset comparisons without real-time alert notification noise.</p>
+                                        </div>
+                                    </label>
+
+                                    <label class="mode-card" data-mode="replay">
+                                        <input type="radio" name="import-mode" value="replay">
+                                        <div class="mode-card-content">
+                                            <div class="mode-title"><i class="fa-solid fa-play"></i> Mode 3: Controlled Replay</div>
+                                            <p>Sequentially streams records through live monitoring with selectable speed ($0.5\times$, $1\times$, $5\times$, $10\times$, Max), interactive pause/resume, and optional ADWIN tracking.</p>
+                                        </div>
+                                    </label>
+
+                                    <label class="mode-card" data-mode="label_eval">
+                                        <input type="radio" name="import-mode" value="label_eval">
+                                        <div class="mode-card-content">
+                                            <div class="mode-title"><i class="fa-solid fa-square-poll-vertical"></i> Mode 4: Label-Assisted Evaluation</div>
+                                            <p>Compares predictions against ground-truth labels. Produces 3&times;3 Confusion Matrix, Accuracy, Precision, Recall, and F1-score without training production model.</p>
+                                        </div>
+                                    </label>
+                                </div>
+
+                                <!-- REPLAY SPEED & OPTIONS -->
+                                <div id="replay-options-panel" class="replay-options-card hide" style="margin-top: 16px; padding: 14px; border: 1px solid var(--border-color); border-radius: 8px; background: var(--bg-surface-subtle);">
+                                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                                        <div>
+                                            <strong>Replay Playback Rate</strong>
+                                            <div class="text-muted" style="font-size: 12px;">Controls throughput throttling between consecutive flow observations</div>
+                                        </div>
+                                        <div class="btn-group" id="replay-speed-group">
+                                            <button type="button" class="btn-speed" data-speed="0.5">0.5&times;</button>
+                                            <button type="button" class="btn-speed active" data-speed="1.0">1.0&times;</button>
+                                            <button type="button" class="btn-speed" data-speed="5.0">5.0&times;</button>
+                                            <button type="button" class="btn-speed" data-speed="10.0">10&times;</button>
+                                            <button type="button" class="btn-speed" data-speed="max">Max</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="options-checkbox-row" style="margin-top: 14px; display: flex; gap: 20px;">
+                                    <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
+                                        <input type="checkbox" id="chk-isolate-profile" checked>
+                                        <span>Isolate Device Behaviour Profile (Do not alter active live device baseline)</span>
+                                    </label>
+                                </div>
+
+                                <div class="alert-info-callout" style="margin-top: 16px; padding: 12px 14px; border-left: 4px solid var(--accent-teal); background: var(--accent-teal-bg); border-radius: 4px;">
+                                    <div style="display: flex; gap: 10px; align-items: flex-start;">
+                                        <i class="fa-solid fa-shield-cat" style="color: var(--accent-teal); font-size: 18px; margin-top: 2px;"></i>
+                                        <div style="font-size: 12px; color: var(--text-secondary); line-height: 1.5;">
+                                            <strong>Academic Integrity Guarantee:</strong> Ingested static datasets run through detection models in supervised or inference-only mode. Live River ARF online weights and ADWIN drift windows remain strictly protected from historical distribution bias.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="stage-action-bar" style="margin-top: 20px; display: flex; justify-content: space-between;">
+                                    <button type="button" id="btn-stage4-back" class="btn-secondary"><i class="fa-solid fa-arrow-left"></i> Back to Mapping</button>
+                                    <button type="button" id="btn-stage4-execute" class="btn-primary"><i class="fa-solid fa-bolt"></i> Launch Import Pipeline</button>
+                                </div>
+                            </div>
+
+                            <!-- STAGE 5: RESULTS & LIVE PROGRESS -->
+                            <div id="import-stage-5" class="wizard-stage hide">
+                                <div class="live-progress-card" style="padding: 18px; border: 1px solid var(--border-color); border-radius: 10px; background: var(--bg-surface);">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                        <div>
+                                            <h4 style="font-size: 15px; font-weight: 700; margin: 0;" id="progress-batch-title">Processing Ingestion Batch</h4>
+                                            <div class="text-muted" style="font-size: 12px;" id="progress-batch-status">Ingesting flow records...</div>
+                                        </div>
+                                        <div style="display: flex; gap: 8px;" id="replay-live-controls">
+                                            <button type="button" id="btn-import-pause" class="btn-secondary btn-sm"><i class="fa-solid fa-pause"></i> Pause</button>
+                                            <button type="button" id="btn-import-resume" class="btn-secondary btn-sm hide"><i class="fa-solid fa-play"></i> Resume</button>
+                                            <button type="button" id="btn-import-cancel" class="btn-secondary btn-sm" style="color: var(--color-malicious);"><i class="fa-solid fa-stop"></i> Cancel</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="progress" style="height: 12px; margin: 12px 0 8px 0; background: var(--bg-surface-subtle); border-radius: 6px; overflow: hidden;">
+                                        <div id="import-progress-bar" class="progress-bar" style="width: 0%; height: 100%; background: var(--accent-teal); transition: width 0.2s ease;"></div>
+                                    </div>
+
+                                    <div style="display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted);">
+                                        <span>Progress: <strong id="progress-count-text">0 / 0</strong></span>
+                                        <span>Throughput: <strong id="progress-speed-text">0.0</strong> records/sec</span>
+                                        <span>Completion: <strong id="progress-pct-text">0.0%</strong></span>
+                                    </div>
+                                </div>
+
+                                <!-- LIVE TELEMETRY COUNTERS -->
+                                <div class="import-counters-grid" style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin-top: 14px;">
+                                    <div class="kpi-mini-card">
+                                        <span class="lbl">Normal Flows</span>
+                                        <span class="val" id="cnt-normal" style="color: var(--color-normal);">0</span>
+                                    </div>
+                                    <div class="kpi-mini-card">
+                                        <span class="lbl">Suspicious</span>
+                                        <span class="val" id="cnt-suspicious" style="color: var(--color-warning);">0</span>
+                                    </div>
+                                    <div class="kpi-mini-card">
+                                        <span class="lbl">Malicious</span>
+                                        <span class="val" id="cnt-malicious" style="color: var(--color-malicious);">0</span>
+                                    </div>
+                                    <div class="kpi-mini-card">
+                                        <span class="lbl">HST Anomalies</span>
+                                        <span class="val" id="cnt-anomalies" style="color: var(--accent-purple);">0</span>
+                                    </div>
+                                    <div class="kpi-mini-card">
+                                        <span class="lbl">IOC Matches</span>
+                                        <span class="val" id="cnt-watchlist" style="color: var(--color-high);">0</span>
+                                    </div>
+                                    <div class="kpi-mini-card">
+                                        <span class="lbl">Alerts Raised</span>
+                                        <span class="val" id="cnt-alerts">0</span>
+                                    </div>
+                                </div>
+
+                                <!-- FINAL EVALUATION METRICS CARD (Appears on completion for Mode 4 or Mode 1) -->
+                                <div id="import-eval-card" class="eval-metrics-deck hide" style="margin-top: 18px; padding: 16px; border: 1px solid var(--border-color); border-radius: 10px; background: var(--bg-surface-subtle);">
+                                    <h4 style="font-size: 14px; font-weight: 700; margin-bottom: 12px;"><i class="fa-solid fa-chart-line"></i> Empirical Supervised Evaluation Metrics</h4>
+                                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 14px;">
+                                        <div class="kpi-mini-card"><span class="lbl">Accuracy</span><span class="val" id="eval-acc">-</span></div>
+                                        <div class="kpi-mini-card"><span class="lbl">Precision</span><span class="val" id="eval-prec">-</span></div>
+                                        <div class="kpi-mini-card"><span class="lbl">Recall</span><span class="val" id="eval-rec">-</span></div>
+                                        <div class="kpi-mini-card"><span class="lbl">F1-Score</span><span class="val" id="eval-f1">-</span></div>
+                                    </div>
+                                    <h5 style="font-size: 12px; font-weight: 700; margin-bottom: 6px;">Evaluation Confusion Matrix</h5>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered table-sm" style="font-size: 12px; text-align: center;" id="eval-matrix-table">
+                                            <thead>
+                                                <tr><th>True \ Pred</th><th>Normal</th><th>Suspicious</th><th>Malicious</th></tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr><th>Normal</th><td id="cm-nn">0</td><td id="cm-ns">0</td><td id="cm-nm">0</td></tr>
+                                                <tr><th>Suspicious</th><td id="cm-sn">0</td><td id="cm-ss">0</td><td id="cm-sm">0</td></tr>
+                                                <tr><th>Malicious</th><td id="cm-mn">0</td><td id="cm-ms">0</td><td id="cm-mm">0</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <!-- FINAL ACTIONS BAR -->
+                                <div id="import-completed-actions" class="stage-action-bar hide" style="margin-top: 20px; display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end;">
+                                    <button type="button" id="btn-summary-view-flows" class="btn-secondary"><i class="fa-solid fa-stream"></i> View In Historical Data</button>
+                                    <button type="button" id="btn-summary-view-alerts" class="btn-secondary"><i class="fa-solid fa-bell"></i> View Alerts</button>
+                                    <button type="button" id="btn-summary-open-research" class="btn-secondary"><i class="fa-solid fa-flask-vial"></i> Open in Research Workbench</button>
+                                    <button type="button" id="btn-summary-export-csv" class="btn-secondary"><i class="fa-solid fa-file-csv"></i> Export Dataset CSV</button>
+                                    <button type="button" id="btn-summary-new-import" class="btn-primary"><i class="fa-solid fa-plus"></i> Import Another Dataset</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- RECENT IMPORT BATCHES DRAWER / TABLE -->
+                        <div class="card" style="margin-top: 20px;">
+                            <div class="workbench-header">
+                                <div>
+                                    <h4 style="font-size: 14px; font-weight: 700; margin: 0;"><i class="fa-solid fa-clock-rotate-left"></i> Ingestion Batches Repository</h4>
+                                    <p class="text-secondary" style="font-size: 12px; margin: 2px 0 0 0;">Manage previously imported datasets, export analysis findings, or safely purge batches.</p>
+                                </div>
+                            </div>
+                            <div class="table-responsive" style="margin-top: 10px;">
+                                <table class="table table-hover" id="import-batches-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Batch ID</th>
+                                            <th>Dataset Name</th>
+                                            <th>File Format</th>
+                                            <th>Analysis Mode</th>
+                                            <th>Records</th>
+                                            <th>Status</th>
+                                            <th>Uploaded At</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="import-batches-tbody">
+                                        <tr><td colspan="8" class="text-center text-muted">No external batches imported yet.</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </section>
+
+                <!-- ==========================================================
+                     ENVIRONMENT 5: SYSTEM
+                     Tabs: System Status, Settings
+                     ========================================================== -->
+                <section id="system-view" class="view-panel hide">
+                    <!-- Subnavigation Tabs -->
+                    <div class="subnav-tabs">
+                        <button class="subnav-tab active" data-subtab="tab-sys-status"><i class="fa-solid fa-heart-pulse"></i> System Status</button>
+                        <button class="subnav-tab" data-subtab="tab-sys-settings"><i class="fa-solid fa-sliders"></i> Sensor Settings</button>
+                    </div>
+
+                    <!-- TAB 1: SYSTEM STATUS (ELEVATED FIRST-CLASS VIEW) -->
+                    <div id="tab-sys-status" class="tab-pane active">
+                        <div class="system-status-container animate-slide-up">
+                            <div class="status-deck-header" style="margin-bottom: 14px;">
+                                <div>
+                                    <h3><i class="fa-solid fa-server"></i> Component Health & Pipeline Diagnostics</h3>
+                                    <p class="text-secondary">Continuous health monitoring across all architectural components in the NEXz runtime pipeline</p>
+                                </div>
+                                <button class="btn-secondary btn-sm" id="btn-refresh-sys-status"><i class="fa-solid fa-rotate"></i> Refresh Health</button>
+                            </div>
+
+                            <!-- 8 Component Health Cards Deck -->
+                            <div class="sys-health-grid">
+                                <!-- 1. FastAPI -->
+                                <div class="card sys-health-card">
+                                    <div class="health-card-top">
+                                        <div class="component-icon color-teal"><i class="fa-solid fa-bolt"></i></div>
+                                        <span class="badge bg-success" id="comp-status-api">Operational</span>
+                                    </div>
+                                    <h4>FastAPI Application Server</h4>
+                                    <p class="text-secondary">Asynchronous REST API, routing, and background tasks</p>
+                                    <div class="component-meta">
+                                        <div><span>Port:</span> <strong>8000</strong></div>
+                                        <div><span>Latency:</span> <strong id="comp-api-latency">&lt; 15 ms</strong></div>
+                                    </div>
+                                </div>
+
+                                <!-- 2. SQLite -->
+                                <div class="card sys-health-card">
+                                    <div class="health-card-top">
+                                        <div class="component-icon color-navy"><i class="fa-solid fa-database"></i></div>
+                                        <span class="badge bg-success" id="comp-status-db">Connected</span>
+                                    </div>
+                                    <h4>SQLite Relational Store</h4>
+                                    <p class="text-secondary">Indexed transactional storage for flows, alerts, profiles, metrics</p>
+                                    <div class="component-meta">
+                                        <div><span>DB File:</span> <strong>ids_system.db</strong></div>
+                                        <div><span>Status:</span> <strong>PRAGMA OK</strong></div>
+                                    </div>
+                                </div>
+
+                                <!-- 3. Packet Sniffer -->
+                                <div class="card sys-health-card">
+                                    <div class="health-card-top">
+                                        <div class="component-icon color-amber"><i class="fa-solid fa-tower-broadcast"></i></div>
+                                        <span class="badge" id="comp-status-sniffer">Sensor Idle</span>
+                                    </div>
+                                    <h4>Packet Capture Engine</h4>
+                                    <p class="text-secondary">Scapy raw socket capture and 5-tuple flow aggregation</p>
+                                    <div class="component-meta">
+                                        <div><span>NIC:</span> <strong id="comp-sniffer-nic">None</strong></div>
+                                        <div><span>PPS:</span> <strong id="comp-sniffer-pps">0 PPS</strong></div>
+                                    </div>
+                                </div>
+
+                                <!-- 4. Streaming ML ARF -->
+                                <div class="card sys-health-card">
+                                    <div class="health-card-top">
+                                        <div class="component-icon color-purple"><i class="fa-solid fa-tree"></i></div>
+                                        <span class="badge bg-success" id="comp-status-ml">Active Ensemble</span>
+                                    </div>
+                                    <h4>Adaptive Random Forest</h4>
+                                    <p class="text-secondary">River online Hoeffding tree classifier ensemble (10 trees)</p>
+                                    <div class="component-meta">
+                                        <div><span>Samples:</span> <strong id="comp-ml-samples">0</strong></div>
+                                        <div><span>Accuracy:</span> <strong id="comp-ml-acc">100%</strong></div>
+                                    </div>
+                                </div>
+
+                                <!-- 5. ADWIN Drift Detector -->
+                                <div class="card sys-health-card">
+                                    <div class="health-card-top">
+                                        <div class="component-icon color-teal"><i class="fa-solid fa-wave-square"></i></div>
+                                        <span class="badge bg-success" id="comp-status-adwin">Stable</span>
+                                    </div>
+                                    <h4>ADWIN Concept Drift</h4>
+                                    <p class="text-secondary">Adaptive windowing monitoring classifier error variance</p>
+                                    <div class="component-meta">
+                                        <div><span>Window ($W$):</span> <strong id="comp-adwin-w">0</strong></div>
+                                        <div><span>Confidence:</span> <strong>99.8%</strong></div>
+                                    </div>
+                                </div>
+
+                                <!-- 6. Device Behaviour Profiler -->
+                                <div class="card sys-health-card">
+                                    <div class="health-card-top">
+                                        <div class="component-icon color-purple"><i class="fa-solid fa-fingerprint"></i></div>
+                                        <span class="badge bg-success" id="comp-status-hst">Active</span>
+                                    </div>
+                                    <h4>Device Profiler (HST)</h4>
+                                    <p class="text-secondary">Half-Space Trees anomaly detection with LRU cache bounding</p>
+                                    <div class="component-meta">
+                                        <div><span>Capacity:</span> <strong id="comp-hst-cap">0 / 200</strong></div>
+                                        <div><span>Evictions:</span> <strong id="comp-hst-evict">0</strong></div>
+                                    </div>
+                                </div>
+
+                                <!-- 7. WebSocket Channel -->
+                                <div class="card sys-health-card">
+                                    <div class="health-card-top">
+                                        <div class="component-icon color-navy"><i class="fa-solid fa-arrows-spin"></i></div>
+                                        <span class="badge bg-success" id="comp-status-ws">Connected</span>
+                                    </div>
+                                    <h4>Real-Time WebSocket Channel</h4>
+                                    <p class="text-secondary">Push delivery for threat alerts and live metrics</p>
+                                    <div class="component-meta">
+                                        <div><span>Route:</span> <strong>/api/ws/alerts</strong></div>
+                                        <div><span>Channel:</span> <strong>Active</strong></div>
+                                    </div>
+                                </div>
+
+                                <!-- 8. System Resources -->
+                                <div class="card sys-health-card">
+                                    <div class="health-card-top">
+                                        <div class="component-icon color-normal"><i class="fa-solid fa-shield-check"></i></div>
+                                        <span class="badge bg-success" id="comp-status-res">Healthy</span>
+                                    </div>
+                                    <h4>System Resources</h4>
+                                    <p class="text-secondary">Host memory bounds and worker thread execution</p>
+                                    <div class="component-meta">
+                                        <div><span>Memory:</span> <strong>Bounded</strong></div>
+                                        <div><span>Threads:</span> <strong>Operational</strong></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 2: SETTINGS & PCAP -->
+                    <div id="tab-sys-settings" class="tab-pane">
+                        <div class="card animate-slide-up" style="max-width: 800px;">
+                            <div class="card-header">
+                                <div>
+                                    <h3><i class="fa-solid fa-sliders"></i> Sensor & Ingestion Configuration</h3>
+                                    <p class="text-secondary">Configure sensor startup behavior, network interfaces, flow timeouts, and import offline PCAP recordings.</p>
+                                </div>
+                            </div>
+                            <div style="padding: 16px 0;">
+                                <div class="form-group">
+                                    <label for="select-monitoring-mode-inline"><i class="fa-solid fa-power-off"></i> Monitoring Startup Mode</label>
+                                    <select id="select-monitoring-mode-inline" class="header-select">
+                                        <option value="manual" selected>Manual Mode (Sensor stays idle on boot until operator clicks start)</option>
+                                        <option value="automatic">Automatic Mode (Sensor starts monitoring on application launch)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="select-nic-inline"><i class="fa-solid fa-ethernet"></i> Default Network Interface</label>
+                                    <select id="select-nic-inline" class="header-select"></select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="select-timeout-inline"><i class="fa-solid fa-clock"></i> Flow Inactivity Timeout</label>
+                                    <select id="select-timeout-inline" class="header-select">
+                                        <option value="1.0">1.0 Second (High Velocity Analysis)</option>
+                                        <option value="2.0" selected>2.0 Seconds (Balanced Standard)</option>
+                                        <option value="5.0">5.0 Seconds (Extended Conversation Window)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="select-aggregation-window-inline"><i class="fa-solid fa-bell"></i> Alert Grouping Time Window</label>
+                                    <select id="select-aggregation-window-inline" class="header-select">
+                                        <option value="15.0">15 Seconds</option>
+                                        <option value="30.0" selected>30 Seconds (Default Balanced)</option>
+                                        <option value="60.0">60 Seconds (Aggressive Deduplication)</option>
+                                    </select>
+                                </div>
+                                <button id="btn-save-settings-inline" class="btn-primary" style="width:100%;">
+                                    <i class="fa-solid fa-floppy-disk"></i> Save Configuration
+                                </button>
+
+                                <hr class="separator" style="margin:20px 0;">
+
+                                <div class="form-group">
+                                    <label><i class="fa-solid fa-file-shield"></i> Import Offline PCAP Recordings</label>
+                                    <div class="pcap-dropzone" id="pcap-dropzone-inline">
+                                        <i class="fa-solid fa-cloud-arrow-up drop-icon"></i>
+                                        <p>Drag and drop your <strong>.pcap</strong> or <strong>.pcapng</strong> file here, or click to browse</p>
+                                        <input type="file" id="pcap-file-input-inline" accept=".pcap,.pcapng" style="display:none">
+                                    </div>
+                                    <div id="pcap-upload-status-inline" class="upload-status hide">
+                                        <i class="fa-solid fa-spinner animate-spin"></i> PCAP file uploaded. Processing flows in background queue.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Backward Compatibility hidden alias for research-view -->
+                <section id="research-view" class="view-panel hide" style="display:none;"></section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- SETTINGS & PCAP MODAL DIALOG (UTILITY COMPONENT) -->
+    <div id="settings-modal" class="modal-overlay">
+        <div class="modal-card animate-scale-up">
+            <div class="modal-header">
+                <div>
+                    <h3><i class="fa-solid fa-sliders"></i> System & Sensor Configuration</h3>
+                    <p class="text-secondary">Configure sensor startup behavior, flow timeouts, and import offline PCAP recordings.</p>
+                </div>
+                <button id="settings-modal-close" class="btn-icon"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="select-monitoring-mode"><i class="fa-solid fa-power-off"></i> Monitoring Startup Mode</label>
+                    <select id="select-monitoring-mode" class="header-select">
+                        <option value="manual" selected>Manual Mode (Sensor stays idle on boot until operator clicks start)</option>
+                        <option value="automatic">Automatic Mode (Sensor starts monitoring on application launch)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="select-nic"><i class="fa-solid fa-ethernet"></i> Default Network Interface</label>
+                    <select id="select-nic" class="header-select"></select>
+                </div>
+                <div class="form-group">
+                    <label for="select-timeout"><i class="fa-solid fa-clock"></i> Flow Inactivity Timeout</label>
+                    <select id="select-timeout" class="header-select">
+                        <option value="1.0">1.0 Second (High Velocity Analysis)</option>
+                        <option value="2.0" selected>2.0 Seconds (Balanced Standard)</option>
+                        <option value="5.0">5.0 Seconds (Extended Conversation Window)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="select-aggregation-window"><i class="fa-solid fa-bell"></i> Alert Grouping Time Window</label>
+                    <select id="select-aggregation-window" class="header-select">
+                        <option value="15.0">15 Seconds</option>
+                        <option value="30.0" selected>30 Seconds (Default Balanced)</option>
+                        <option value="60.0">60 Seconds (Aggressive Deduplication)</option>
+                    </select>
+                </div>
+                <button id="btn-save-settings" class="btn-primary" style="width:100%;">
+                    <i class="fa-solid fa-floppy-disk"></i> Save Configuration
+                </button>
+
+                <hr class="separator" style="margin:20px 0;">
+
+                <div class="form-group">
+                    <label><i class="fa-solid fa-file-shield"></i> Import Offline PCAP Recordings</label>
+                    <div class="pcap-dropzone" id="pcap-dropzone">
+                        <i class="fa-solid fa-cloud-arrow-up drop-icon"></i>
+                        <p>Drag and drop your <strong>.pcap</strong> or <strong>.pcapng</strong> file here, or click to browse</p>
+                        <input type="file" id="pcap-file-input" accept=".pcap,.pcapng" style="display:none">
+                    </div>
+                    <div id="pcap-upload-status" class="upload-status hide">
+                        <i class="fa-solid fa-spinner animate-spin"></i> PCAP file uploaded. Processing flows in background queue.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- XAI DETAIL MODAL -->
+    <div id="xai-modal" class="modal-overlay">
+        <div class="modal-card animate-scale-up" style="max-width: 680px;">
+            <div class="modal-header">
+                <div>
+                    <h3 id="modal-threat-title"><i class="fa-solid fa-shield-virus"></i> Security Anomaly Diagnostic</h3>
+                    <div class="xai-header-badges">
+                        <span id="modal-severity" class="badge">Medium</span>
+                        <span id="modal-sim-tag" class="badge badge-sim hidden">[SIMULATION]</span>
+                        <span id="modal-status-badge" class="badge badge-status">Status: Active</span>
+                        <span id="modal-component-badge" class="badge badge-status">Engine: Streaming ML</span>
+                    </div>
+                </div>
+                <button id="xai-modal-close" class="btn-icon"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <!-- Section 1: Observed Event -->
+                <div class="xai-step-block">
+                    <div class="xai-section-title"><i class="fa-solid fa-network-wired"></i> 1. Observed Network Event</div>
+                    <div class="xai-meta-grid">
+                        <div><span class="label">Source Connection:</span> <strong id="modal-src">0.0.0.0:0</strong></div>
+                        <div><span class="label">Target Connection:</span> <strong id="modal-dest">0.0.0.0:0</strong></div>
+                        <div><span class="label">Protocol:</span> <strong id="modal-proto">TCP</strong></div>
+                        <div><span class="label">Confidence Score:</span> <strong id="modal-conf">95%</strong></div>
+                        <div><span class="label">Deduplicated Count:</span> <strong id="modal-count">1</strong></div>
+                        <div><span class="label">First / Last Seen:</span> <span id="modal-timestamps" style="font-size: 11px; font-weight: 600;">-</span></div>
+                    </div>
+                </div>
+
+                <!-- Section 2: Why Flagged Suspicious -->
+                <div class="xai-step-block">
+                    <div class="xai-section-title"><i class="fa-solid fa-magnifying-glass-chart"></i> 2. Why Flagged Suspicious & Anomaly Rationale</div>
+                    <div class="xai-body" id="modal-reason" style="font-weight: 600; color: var(--text-primary); margin-bottom: 8px;">Loading reasoning heuristics...</div>
+                    <div class="xai-factors-grid" id="modal-factors-chips">
+                        <!-- Populated dynamically with contributing features -->
+                    </div>
+                </div>
+
+                <!-- Section 3: Plain-Language Diagnostic Meaning -->
+                <div class="xai-step-block" style="background: var(--accent-navy-bg); border-color: var(--accent-navy-border);">
+                    <div class="xai-section-title" style="color: var(--accent-navy);"><i class="fa-solid fa-graduation-cap"></i> 3. Plain-Language Academic Explanation</div>
+                    <div class="xai-body" id="modal-plain-meaning" style="font-size: 12.5px; line-height: 1.5;">
+                        This telemetry signature represents an observable pattern deviation where packet dynamics violate expected transport layer baseline behavior.
+                    </div>
+                </div>
+
+                <!-- Section 4: Recommended Action Playbook -->
+                <div class="xai-step-block action-panel" style="background: var(--color-malicious-bg); border-color: var(--color-malicious-border);">
+                    <div class="xai-section-title" style="color: var(--color-malicious);"><i class="fa-solid fa-shield-halved"></i> 4. Recommended Mitigation Playbook</div>
+                    <div class="xai-body" id="modal-action" style="font-size: 12.5px; line-height: 1.5;">Loading action guidelines...</div>
+                </div>
+
+                <!-- Section 5: Collapsible Raw Technical Telemetry -->
+                <details style="margin-top: 8px;">
+                    <summary class="xai-details-toggle"><i class="fa-solid fa-code"></i> Technical Telemetry & Flow Vectors</summary>
+                    <pre id="modal-raw-details" style="font-size: 11px; background: var(--bg-base); padding: 10px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); overflow-x: auto; margin-top: 6px;"></pre>
+                </details>
+
+                <!-- Section 6: Action Footer -->
+                <div class="xai-modal-footer">
+                    <button id="btn-modal-ack" class="btn btn-warning"><i class="fa-solid fa-check"></i> Acknowledge</button>
+                    <button id="btn-modal-resolve" class="btn btn-success"><i class="fa-solid fa-check-double"></i> Mark as Resolved</button>
+                    <button id="btn-modal-close" class="btn btn-outline">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONNECTION LOG PACKET DISSECTOR DRAWER -->
+    <div id="log-drawer" class="drawer-overlay">
+        <div class="drawer-panel">
+            <div class="drawer-header">
+                <div>
+                    <h3><i class="fa-solid fa-microchip"></i> Packet Inspector & Dissector</h3>
+                    <p class="text-secondary" id="drawer-flow-title">Flow Details</p>
+                </div>
+                <button id="log-drawer-close" class="btn-icon"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="drawer-body">
+                <div class="drawer-meta-grid">
+                    <div><span>Timestamp:</span> <strong id="drawer-time">-</strong></div>
+                    <div><span>Protocol:</span> <strong id="drawer-proto">-</strong></div>
+                    <div><span>Source Host:</span> <strong id="drawer-src">-</strong></div>
+                    <div><span>Destination Host:</span> <strong id="drawer-dst">-</strong></div>
+                    <div><span>Flow Payload Bytes:</span> <strong id="drawer-bytes">-</strong></div>
+                    <div><span>TCP Handshake State:</span> <strong id="drawer-state">-</strong></div>
+                </div>
+                
+                <h4 style="font-weight:700; margin: 18px 0 8px 0;">
+                    <i class="fa-solid fa-code"></i> Raw Protocol Header Dissection
+                </h4>
+                <div class="hex-legend">
+                    <span class="hex-tag hex-tag-eth">Ethernet L2 (14B)</span>
+                    <span class="hex-tag hex-tag-ip">IPv4 Header (20B)</span>
+                    <span class="hex-tag hex-tag-tcp">L4 Header (20B)</span>
+                    <span class="hex-tag hex-tag-payload">Payload Data</span>
+                </div>
+                <div id="drawer-hex-view"></div>
+            </div>
+            
+            <div class="xai-panel" style="margin-top:15px;">
+                <div class="xai-title"><i class="fa-solid fa-circle-info"></i> Educational Flow Context</div>
+                <div class="xai-body">
+                    In network security monitoring, a <strong>Flow</strong> aggregates raw packets matching the 5-tuple (source IP, destination IP, source port, destination port, protocol). This enables online ML models and behavioral baselines to analyze communication patterns without storing every packet indefinitely.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="app.js?v=2026_09_14_nexz_elevated"></script>
+
+    <!-- WATCHLIST / IOC MANAGER MODAL -->
+    <div id="watchlist-modal" class="modal-overlay hide">
+        <div class="modal-card animate-slide-up" style="max-width: 720px; width: 90%;">
+            <div class="modal-header">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <i class="fa-solid fa-shield-virus" style="color: var(--accent-teal); font-size: 20px;"></i>
+                    <h3 style="margin: 0; font-size: 16px;">Active Threat Watchlists & IOC Repository</h3>
+                </div>
+                <button type="button" class="btn-close-modal" id="btn-close-watchlist-modal">&times;</button>
+            </div>
+            <div class="modal-body" style="padding: 16px;">
+                <div style="display: flex; gap: 8px; margin-bottom: 14px;">
+                    <input type="text" id="wl-new-value" class="header-select" placeholder="IP Address or Domain (e.g. 198.51.100.25)" style="flex: 2;">
+                    <select id="wl-new-type" class="header-select" style="flex: 1;">
+                        <option value="ipv4">IPv4 Address</option>
+                        <option value="ipv6">IPv6 Address</option>
+                        <option value="domain">Domain Name</option>
+                    </select>
+                    <input type="text" id="wl-new-label" class="header-select" placeholder="Label (e.g. Cobalt Strike C2)" style="flex: 1.5;">
+                    <button type="button" id="btn-wl-add-single" class="btn-primary btn-sm"><i class="fa-solid fa-plus"></i> Add Entry</button>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <span class="text-muted" style="font-size: 12px;">Batch IOC File Import (.txt / .csv list of IPs):</span>
+                    <label class="btn-secondary btn-sm" style="cursor: pointer; margin: 0;">
+                        <i class="fa-solid fa-upload"></i> Upload IOC List
+                        <input type="file" id="wl-file-input" style="display: none;" accept=".txt,.csv,.ioc">
+                    </label>
+                </div>
+
+                <div class="table-responsive" style="max-height: 320px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 6px;">
+                    <table class="table table-hover table-sm" id="watchlist-table" style="font-size: 12px; margin-bottom: 0;">
+                        <thead>
+                            <tr>
+                                <th>IOC Value</th>
+                                <th>Type</th>
+                                <th>Classification Label</th>
+                                <th>Source</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="watchlist-tbody">
+                            <tr><td colspan="5" class="text-center text-muted">No IOCs loaded in watchlist.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer" style="padding: 12px 16px; display: flex; justify-content: flex-end;">
+                <button type="button" class="btn-secondary" id="btn-close-watchlist-modal-footer">Close</button>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
