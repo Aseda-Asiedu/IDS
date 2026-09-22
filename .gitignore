@@ -1,0 +1,43 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# SQLite databases & runtime storage
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+*.db-wal
+*.db-shm
+backend/app.db
+backend/app_v2.db
+
+# Dynamic upload directories & temporary test files
+backend/uploads/*
+!backend/uploads/.gitkeep
+scratch/
+
+# IDE and OS artifacts
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Development notes & temporary files
+Prompt1.txt
+Prompt2.txt
+NEXz_Upgrade_Prompt.txt
+message.txt
+test_enc.txt
+powershell.cmd
+IDS1.docx
+Progress_Report.pdf
